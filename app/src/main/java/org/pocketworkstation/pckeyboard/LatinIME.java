@@ -727,10 +727,19 @@ public class LatinIME extends InputMethodService implements
     		}
     	}
     }
-    
+
+    private void resetCompletions() {
+        mComposing.setLength(0);
+        mPredicting = false;
+        postUpdateSuggestions();
+        TextEntryState.reset();
+    }
+
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
+        if(!restarting)
+            resetCompletions();
         // setCandidatesViewShown(true);
         setCandidatesViewShownInternal(true, false);
         super.setCandidatesViewShown(true);
@@ -1006,10 +1015,7 @@ public class LatinIME extends InputMethodService implements
         // clear whatever candidate text we have.
         if ((((mComposing.length() > 0 && mPredicting))
                 && (newSelStart != candidatesEnd || newSelEnd != candidatesEnd) && mLastSelectionStart != newSelStart)) {
-            mComposing.setLength(0);
-            mPredicting = false;
-            postUpdateSuggestions();
-            TextEntryState.reset();
+            resetCompletions();
             InputConnection ic = getCurrentInputConnection();
             if (ic != null) {
                 ic.finishComposingText();
