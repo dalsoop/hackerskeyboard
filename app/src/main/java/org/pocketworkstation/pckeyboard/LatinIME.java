@@ -2472,6 +2472,8 @@ public class LatinIME extends InputMethodService implements
                     ic.performContextMenuAction(android.R.id.paste);
                 } else if (id == R.id.action_clipboard) {
                     showClipboardPopup(v);
+                } else if (id == R.id.action_emoji) {
+                    showEmojiPopup(v);
                 }
             }
         };
@@ -2480,6 +2482,7 @@ public class LatinIME extends InputMethodService implements
         mActionToolbar.findViewById(R.id.action_copy).setOnClickListener(listener);
         mActionToolbar.findViewById(R.id.action_paste).setOnClickListener(listener);
         mActionToolbar.findViewById(R.id.action_clipboard).setOnClickListener(listener);
+        mActionToolbar.findViewById(R.id.action_emoji).setOnClickListener(listener);
     }
 
     private void showClipboardPopup(View anchor) {
@@ -2503,6 +2506,37 @@ public class LatinIME extends InputMethodService implements
                     if (ic != null) {
                         if (mHangulComposer.isComposing()) commitHangulComposing();
                         ic.commitText(mClipboardHistory.getItems().get(idx), 1);
+                    }
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+    private static final String[] EMOJI_LIST = {
+        "\uD83D\uDE00", "\uD83D\uDE02", "\uD83D\uDE0D", "\uD83D\uDE22", "\uD83D\uDE21",
+        "\uD83D\uDE0E", "\uD83D\uDE09", "\uD83D\uDE14", "\uD83D\uDE31", "\uD83E\uDD23",
+        "\uD83D\uDC4D", "\uD83D\uDC4E", "\uD83D\uDC4B", "\uD83D\uDC4F", "\uD83D\uDE4F",
+        "\u2764",       "\uD83D\uDD25", "\uD83C\uDF89", "\u2705",       "\u274C",
+        "\u2B50",       "\uD83D\uDCA1", "\uD83D\uDCAC", "\uD83D\uDE48", "\uD83D\uDE80",
+        "\uD83C\uDF1F", "\uD83D\uDC40", "\uD83D\uDCAA", "\uD83C\uDF3A", "\uD83C\uDF54"
+    };
+
+    private void showEmojiPopup(View anchor) {
+        android.widget.PopupMenu popup = new android.widget.PopupMenu(this, anchor);
+        for (int i = 0; i < EMOJI_LIST.length; i++) {
+            popup.getMenu().add(0, i, i, EMOJI_LIST[i]);
+        }
+        popup.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(android.view.MenuItem menuItem) {
+                int idx = menuItem.getItemId();
+                if (idx >= 0 && idx < EMOJI_LIST.length) {
+                    InputConnection ic = getCurrentInputConnection();
+                    if (ic != null) {
+                        if (mHangulComposer.isComposing()) commitHangulComposing();
+                        ic.commitText(EMOJI_LIST[idx], 1);
                     }
                 }
                 return true;
