@@ -680,7 +680,7 @@
     <string name="notification_action_settings">Settings</string>
 
     <!-- Action toolbar -->
-    <string name="label_lang_switch">Lang</string>
+    <string name="label_lang_switch">🌐</string>
     <string name="action_select_all">Select All</string>
     <string name="action_cut">Cut</string>
     <string name="action_copy">Copy</string>

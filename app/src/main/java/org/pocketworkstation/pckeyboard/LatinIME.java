@@ -2019,7 +2019,13 @@ public class LatinIME extends InputMethodService implements
             mComposeBuffer.clear();
             break;
         case LatinKeyboardView.KEYCODE_NEXT_LANGUAGE:
-            toggleLanguage(false, true);
+            if (mHangulComposer.isComposing()) commitHangulComposing();
+            if (mLanguageSwitcher.getLocaleCount() > 1) {
+                toggleLanguage(false, true);
+            } else {
+                // Only one language enabled: show system input method picker
+                showInputMethodPicker();
+            }
             break;
         case LatinKeyboardView.KEYCODE_PREV_LANGUAGE:
             toggleLanguage(false, false);
