@@ -79,11 +79,11 @@
             android:keyEdgeFlags="right" />
     </Row>
 
-    <!-- Row 2: ㅁㄴㅇㄹㅎㅗㅓㅏㅣ -->
+    <!-- Row 2: ㅁㄴㅇㄹㅎㅗㅓㅏㅣ (9 keys, 5% gap each side to center) -->
     <Row>
         <Key
             android:keyLabel="ㅁ"
-            android:keyWidth="10%p"
+            android:horizontalGap="5%p"
             android:keyEdgeFlags="left" />
         <Key
             android:keyLabel="ㄴ" />
@@ -101,7 +101,6 @@
             android:keyLabel="ㅏ" />
         <Key
             android:keyLabel="ㅣ"
-            android:keyWidth="10%p"
             android:keyEdgeFlags="right" />
     </Row>
 
