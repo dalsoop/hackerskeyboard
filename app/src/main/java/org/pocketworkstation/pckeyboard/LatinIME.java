@@ -66,6 +66,7 @@ import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileDescriptor;
@@ -155,6 +156,7 @@ public class LatinIME extends InputMethodService implements
     // private LatinKeyboardView mInputView;
     private LinearLayout mCandidateViewContainer;
     private CandidateView mCandidateView;
+    private LinearLayout mActionToolbar;
     private Suggest mSuggest;
     private CompletionInfo[] mCompletions;
 
@@ -733,6 +735,9 @@ public class LatinIME extends InputMethodService implements
             .findViewById(R.id.candidates);
             mCandidateView.setPadding(0, 0, 0, 0);
             mCandidateView.setService(this);
+            mActionToolbar = (LinearLayout) mCandidateViewContainer
+                    .findViewById(R.id.action_toolbar);
+            setupActionToolbar();
             setCandidatesView(mCandidateViewContainer);
         }
         return mCandidateViewContainer;
@@ -748,6 +753,7 @@ public class LatinIME extends InputMethodService implements
             }
             mCandidateViewContainer = null;
             mCandidateView = null;
+            mActionToolbar = null;
         }
         resetPrediction();
     }
@@ -2435,6 +2441,43 @@ public class LatinIME extends InputMethodService implements
         mHangulComposing.setLength(0);
     }
 
+    private void setupActionToolbar() {
+        if (mActionToolbar == null) return;
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputConnection ic = getCurrentInputConnection();
+                if (ic == null) return;
+                if (mHangulComposer.isComposing()) commitHangulComposing();
+                int id = v.getId();
+                if (id == R.id.action_select_all) {
+                    ic.performContextMenuAction(android.R.id.selectAll);
+                } else if (id == R.id.action_cut) {
+                    ic.performContextMenuAction(android.R.id.cut);
+                } else if (id == R.id.action_copy) {
+                    ic.performContextMenuAction(android.R.id.copy);
+                } else if (id == R.id.action_paste) {
+                    ic.performContextMenuAction(android.R.id.paste);
+                }
+            }
+        };
+        mActionToolbar.findViewById(R.id.action_select_all).setOnClickListener(listener);
+        mActionToolbar.findViewById(R.id.action_cut).setOnClickListener(listener);
+        mActionToolbar.findViewById(R.id.action_copy).setOnClickListener(listener);
+        mActionToolbar.findViewById(R.id.action_paste).setOnClickListener(listener);
+    }
+
+    private void updateActionToolbarVisibility(boolean hasSuggestions) {
+        if (mActionToolbar == null || mCandidateView == null) return;
+        if (hasSuggestions) {
+            mCandidateView.setVisibility(View.VISIBLE);
+            mActionToolbar.setVisibility(View.GONE);
+        } else {
+            mCandidateView.setVisibility(View.GONE);
+            mActionToolbar.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void handleSeparator(int primaryCode) {
         // Commit any pending Hangul composition before separator
         if (mHangulComposer.isComposing()) {
@@ -2596,10 +2639,12 @@ public class LatinIME extends InputMethodService implements
             mIsShowingHint = false;
         }
 
+        boolean hasSuggestions = suggestions != null && suggestions.size() > 0;
         if (mCandidateView != null) {
             mCandidateView.setSuggestions(suggestions, completions,
                     typedWordValid, haveMinimalSuggestion);
         }
+        updateActionToolbarVisibility(hasSuggestions);
     }
 
     private void updateSuggestions() {

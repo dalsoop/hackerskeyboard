@@ -388,4 +388,10 @@
         <item>이전 언어</item>
         <item>다음 언어</item>
     </string-array>
+
+    <!-- 액션 툴바 -->
+    <string name="action_select_all">전체선택</string>
+    <string name="action_cut">잘라내기</string>
+    <string name="action_copy">복사</string>
+    <string name="action_paste">붙여넣기</string>
 </resources>
