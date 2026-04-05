@@ -1980,24 +1980,19 @@ public class LatinIME extends InputMethodService implements
                 changeKeyboardMode();
             break;
         case LatinKeyboardView.KEYCODE_CTRL_LEFT:
-            // Ctrl key is handled in onPress() when device has distinct
-            // multi-touch panel.
+            // Always allow toggle (tap Ctrl then tap key) regardless of multitouch
             if (mHangulComposer.isComposing()) commitHangulComposing();
-            if (!distinctMultiTouch)
+            if (!distinctMultiTouch || !mCtrlKeyState.isChording())
                 setModCtrl(!mModCtrl);
             break;
         case LatinKeyboardView.KEYCODE_ALT_LEFT:
-            // Alt key is handled in onPress() when device has distinct
-            // multi-touch panel.
             if (mHangulComposer.isComposing()) commitHangulComposing();
-            if (!distinctMultiTouch)
+            if (!distinctMultiTouch || !mAltKeyState.isChording())
                 setModAlt(!mModAlt);
             break;
         case LatinKeyboardView.KEYCODE_META_LEFT:
-            // Meta key is handled in onPress() when device has distinct
-            // multi-touch panel.
             if (mHangulComposer.isComposing()) commitHangulComposing();
-            if (!distinctMultiTouch)
+            if (!distinctMultiTouch || !mMetaKeyState.isChording())
                 setModMeta(!mModMeta);
             break;
         case LatinKeyboardView.KEYCODE_FN:
