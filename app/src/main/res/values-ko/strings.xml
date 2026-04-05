@@ -395,4 +395,5 @@
     <string name="action_cut">잘라내기</string>
     <string name="action_copy">복사</string>
     <string name="action_paste">붙여넣기</string>
+    <string name="action_clipboard">클립</string>
 </resources>

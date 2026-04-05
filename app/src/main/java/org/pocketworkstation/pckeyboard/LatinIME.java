@@ -157,6 +157,7 @@ public class LatinIME extends InputMethodService implements
     private LinearLayout mCandidateViewContainer;
     private CandidateView mCandidateView;
     private LinearLayout mActionToolbar;
+    private ClipboardHistory mClipboardHistory = new ClipboardHistory();
     private Suggest mSuggest;
     private CompletionInfo[] mCompletions;
 
@@ -363,6 +364,7 @@ public class LatinIME extends InputMethodService implements
         super.onCreate();
         sInstance = this;
         // setStatusIcon(R.drawable.ime_qwerty);
+        mClipboardHistory.start(this);
         mResources = getResources();
         final Configuration conf = mResources.getConfiguration();
         mOrientation = conf.orientation;
@@ -648,6 +650,7 @@ public class LatinIME extends InputMethodService implements
 
     @Override
     public void onDestroy() {
+        mClipboardHistory.stop();
         if (mUserDictionary != null) {
             mUserDictionary.close();
         }
@@ -2467,6 +2470,8 @@ public class LatinIME extends InputMethodService implements
                     ic.performContextMenuAction(android.R.id.copy);
                 } else if (id == R.id.action_paste) {
                     ic.performContextMenuAction(android.R.id.paste);
+                } else if (id == R.id.action_clipboard) {
+                    showClipboardPopup(v);
                 }
             }
         };
@@ -2474,6 +2479,36 @@ public class LatinIME extends InputMethodService implements
         mActionToolbar.findViewById(R.id.action_cut).setOnClickListener(listener);
         mActionToolbar.findViewById(R.id.action_copy).setOnClickListener(listener);
         mActionToolbar.findViewById(R.id.action_paste).setOnClickListener(listener);
+        mActionToolbar.findViewById(R.id.action_clipboard).setOnClickListener(listener);
+    }
+
+    private void showClipboardPopup(View anchor) {
+        java.util.List<String> items = mClipboardHistory.getItems();
+        if (items.isEmpty()) {
+            Toast.makeText(this, "클립보드가 비어있습니다", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        android.widget.PopupMenu popup = new android.widget.PopupMenu(this, anchor);
+        for (int i = 0; i < items.size(); i++) {
+            String item = items.get(i);
+            String label = item.length() > 40 ? item.substring(0, 40) + "..." : item;
+            popup.getMenu().add(0, i, i, label);
+        }
+        popup.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(android.view.MenuItem menuItem) {
+                int idx = menuItem.getItemId();
+                if (idx >= 0 && idx < mClipboardHistory.getItems().size()) {
+                    InputConnection ic = getCurrentInputConnection();
+                    if (ic != null) {
+                        if (mHangulComposer.isComposing()) commitHangulComposing();
+                        ic.commitText(mClipboardHistory.getItems().get(idx), 1);
+                    }
+                }
+                return true;
+            }
+        });
+        popup.show();
     }
 
     private void updateActionToolbarVisibility(boolean hasSuggestions) {

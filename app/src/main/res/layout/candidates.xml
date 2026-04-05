@@ -119,6 +119,26 @@
             android:background="?android:attr/selectableItemBackground"
             />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:background="#555555" />
+
+        <TextView
+            android:id="@+id/action_clipboard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/action_clipboard"
+            android:textSize="13sp"
+            android:textColor="#BBDEFB"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            />
+
     </LinearLayout>
 
 </LinearLayout>
