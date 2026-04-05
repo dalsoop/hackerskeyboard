@@ -2,7 +2,7 @@
 <!--
 /*
 **
-** Copyright 2010, The Android Open Source Project
+** Korean Dubeolsik alternate characters for popup keys.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="alternates_for_a">àáâãäåæ</string>
-    <string name="alternates_for_e">3èéêë</string>
-    <string name="alternates_for_i">8ïîíì</string>
-    <string name="alternates_for_o">9øœöõôóò</string>
-    <string name="alternates_for_u">7üûúù</string>
-    <string name="alternates_for_s">§ß</string>
-    <string name="alternates_for_n">ñ</string>
-    <string name="alternates_for_c">ç</string>
-    <string name="alternates_for_y">6ÿý</string>
+    <!-- Tense consonant (쌍자음) alternates -->
+    <string name="alternates_for_ㅂ">ㅃ</string>
+    <string name="alternates_for_ㅈ">ㅉ</string>
+    <string name="alternates_for_ㄷ">ㄸ</string>
+    <string name="alternates_for_ㄱ">ㄲ</string>
+    <string name="alternates_for_ㅅ">ㅆ</string>
+    <!-- Vowel alternates -->
+    <string name="alternates_for_ㅐ">ㅒ</string>
+    <string name="alternates_for_ㅔ">ㅖ</string>
 </resources>

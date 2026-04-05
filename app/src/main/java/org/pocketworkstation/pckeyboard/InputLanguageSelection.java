@@ -40,7 +40,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     private static final String TAG = "PCKeyboardILS";
     private ArrayList<Loc> mAvailableLanguages = new ArrayList<Loc>();
     private static final String[] BLACKLIST_LANGUAGES = {
-        "ko", "ja", "zh"
+        "ja", "zh"
     };
 
     // Languages for which auto-caps should be disabled
@@ -48,6 +48,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     static {
         NOCAPS_LANGUAGES.add("ar");
         NOCAPS_LANGUAGES.add("iw");
+        NOCAPS_LANGUAGES.add("ko");
         NOCAPS_LANGUAGES.add("th");
     }
 
@@ -56,6 +57,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     static {
         NODEADKEY_LANGUAGES.add("ar");
         NODEADKEY_LANGUAGES.add("iw"); // TODO: currently no niqqud in the keymap?
+        NODEADKEY_LANGUAGES.add("ko");
         NODEADKEY_LANGUAGES.add("th");
     }
 
@@ -79,7 +81,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     private static final String[] KBD_5_ROW = {
         "ar", "bg", "bg_ST", "cs", "cs_QY", "da", "de", "de_NE", "el",
         "en", "en_CX", "en_DV", "en_GB", "es", "es_LA", "fa", "fi", "fr",
-        "fr_CA", "he", "hr", "hu", "hu_QY", "hy", "it", "iw", "lo", "lt",
+        "fr_CA", "he", "hr", "hu", "hu_QY", "hy", "it", "iw", "ko", "lo", "lt",
         "nb", "pt_PT", "ro", "ru", "ru_PH", "si", "sk", "sk_QY", "sl",
         "sr", "sv", "ta", "th", "tr", "uk"
     };
@@ -87,7 +89,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     private static final String[] KBD_4_ROW = {
         "ar", "bg", "bg_ST", "cs", "cs_QY", "da", "de", "de_NE", "el",
         "en", "en_CX", "en_DV", "es", "es_LA", "es_US", "fa", "fr", "fr_CA",
-        "he", "hr", "hu", "hu_QY", "iw", "nb", "ru", "ru_PH", "sk", "sk_QY",
+        "he", "hr", "hu", "hu_QY", "iw", "ko", "nb", "ru", "ru_PH", "sk", "sk_QY",
         "sl", "sr", "sv", "tr", "uk"
     };
 
