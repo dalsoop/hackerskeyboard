@@ -152,7 +152,9 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -185,7 +187,9 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -218,7 +222,9 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -251,7 +257,9 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -285,7 +293,9 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -328,7 +338,9 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -366,7 +378,9 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -404,7 +418,9 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -442,7 +458,9 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"
@@ -481,7 +499,9 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="한/영"
+            android:keyWidth="10%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_space"

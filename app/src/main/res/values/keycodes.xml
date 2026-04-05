@@ -63,4 +63,5 @@
     <integer name="key_fkey_f11">-141</integer>
     <integer name="key_fkey_f12">-142</integer>
     <integer name="key_num_lock">-143</integer>
+    <integer name="key_next_language">-104</integer>
 </resources>
