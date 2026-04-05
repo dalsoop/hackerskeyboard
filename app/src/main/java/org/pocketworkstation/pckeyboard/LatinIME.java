@@ -2436,13 +2436,13 @@ public class LatinIME extends InputMethodService implements
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
         String text = mHangulComposer.commit();
-        if (text != null && text.length() > 0) {
-            mHangulComposing.setLength(0);
-            mHangulComposing.append(text);
-            ic.setComposingText(mHangulComposing, 1);
-            ic.finishComposingText();
-        }
         mHangulComposing.setLength(0);
+        if (text != null && text.length() > 0) {
+            // Use commitText for final commit (Enter, separator, mode switch etc.)
+            // This atomically replaces the composing region and commits in one step,
+            // preventing the last character from jumping to the next line on Enter.
+            ic.commitText(text, 1);
+        }
     }
 
     private void setupActionToolbar() {
