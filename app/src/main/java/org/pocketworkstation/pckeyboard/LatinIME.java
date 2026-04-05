@@ -2138,9 +2138,13 @@ public class LatinIME extends InputMethodService implements
         if (mHangulComposer.isComposing()) {
             if (mHangulComposer.backspace()) {
                 if (mHangulComposer.isComposing()) {
-                    ic.setComposingText(mHangulComposer.getComposing(), 1);
+                    mHangulComposing.setLength(0);
+                    mHangulComposing.append(mHangulComposer.getComposing());
+                    ic.setComposingText(mHangulComposing, 1);
                 } else {
-                    ic.commitText("", 0);
+                    mHangulComposing.setLength(0);
+                    ic.finishComposingText();
+                    ic.deleteSurroundingText(1, 0);
                 }
             }
             ic.endBatchEdit();
@@ -2362,25 +2366,30 @@ public class LatinIME extends InputMethodService implements
                 isWordSeparator(primaryCode));
     }
 
+    private StringBuilder mHangulComposing = new StringBuilder();
+
     private void handleHangulCharacter(int code) {
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
 
         ic.beginBatchEdit();
 
+        String prevComposing = mHangulComposer.isComposing() ? mHangulComposer.getComposing() : null;
         String commitText = mHangulComposer.process(code);
 
-        // Commit any completed syllable first
         if (commitText != null && commitText.length() > 0) {
+            // Completed syllable: finish current composing, then commit
+            mHangulComposing.setLength(0);
             ic.finishComposingText();
             ic.commitText(commitText, 1);
         }
 
-        // Update composing text with current state
+        // Set new composing text for current in-progress syllable
         if (mHangulComposer.isComposing()) {
-            ic.setComposingText(mHangulComposer.getComposing(), 1);
-        } else {
-            ic.finishComposingText();
+            String composing = mHangulComposer.getComposing();
+            mHangulComposing.setLength(0);
+            mHangulComposing.append(composing);
+            ic.setComposingText(mHangulComposing, 1);
         }
 
         ic.endBatchEdit();
@@ -2390,6 +2399,7 @@ public class LatinIME extends InputMethodService implements
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
         String text = mHangulComposer.commit();
+        mHangulComposing.setLength(0);
         if (text != null && text.length() > 0) {
             ic.finishComposingText();
             ic.commitText(text, 1);
