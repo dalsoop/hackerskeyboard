@@ -177,6 +177,7 @@ public class LatinIME extends InputMethodService implements
     private WordComposer mWord = new WordComposer();
     private int mCommittedLength;
     private boolean mPredicting;
+    private HangulComposer mHangulComposer = new HangulComposer();
     private boolean mEnableVoiceButton;
     private CharSequence mBestWord;
     private boolean mPredictionOnForMode;
@@ -2131,6 +2132,19 @@ public class LatinIME extends InputMethodService implements
 
         ic.beginBatchEdit();
 
+        // Handle Hangul composing backspace
+        if (mHangulComposer.isComposing()) {
+            if (mHangulComposer.backspace()) {
+                if (mHangulComposer.isComposing()) {
+                    ic.setComposingText(mHangulComposer.getComposing(), 1);
+                } else {
+                    ic.commitText("", 0);
+                }
+            }
+            ic.endBatchEdit();
+            return;
+        }
+
         if (mPredicting) {
             final int length = mComposing.length();
             if (length > 0) {
@@ -2287,6 +2301,17 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
+        // Hangul composition: intercept jamo input
+        if (HangulComposer.isHangulJamo(primaryCode)) {
+            handleHangulCharacter(primaryCode);
+            return;
+        }
+
+        // Non-Hangul input: commit any pending Hangul composition
+        if (mHangulComposer.isComposing()) {
+            commitHangulComposing();
+        }
+
         if (mLastSelectionStart == mLastSelectionEnd
                 && TextEntryState.isCorrecting()) {
             abortCorrection(false);
@@ -2335,7 +2360,37 @@ public class LatinIME extends InputMethodService implements
                 isWordSeparator(primaryCode));
     }
 
+    private void handleHangulCharacter(int code) {
+        InputConnection ic = getCurrentInputConnection();
+        if (ic == null) return;
+
+        String commitText = mHangulComposer.process(code);
+
+        // Commit any completed syllable
+        if (commitText != null && commitText.length() > 0) {
+            ic.commitText(commitText, 1);
+        }
+
+        // Update composing text with current state
+        if (mHangulComposer.isComposing()) {
+            ic.setComposingText(mHangulComposer.getComposing(), 1);
+        }
+    }
+
+    private void commitHangulComposing() {
+        InputConnection ic = getCurrentInputConnection();
+        if (ic == null) return;
+        String text = mHangulComposer.commit();
+        if (text != null && text.length() > 0) {
+            ic.commitText(text, 1);
+        }
+    }
+
     private void handleSeparator(int primaryCode) {
+        // Commit any pending Hangul composition before separator
+        if (mHangulComposer.isComposing()) {
+            commitHangulComposing();
+        }
 
         // Should dismiss the "Touch again to save" message when handling
         // separator
@@ -2905,6 +2960,10 @@ public class LatinIME extends InputMethodService implements
     }
 
     void toggleLanguage(boolean reset, boolean next) {
+        // Commit Hangul composition before switching language
+        if (mHangulComposer.isComposing()) {
+            commitHangulComposing();
+        }
         if (reset) {
             mLanguageSwitcher.reset();
         } else {
