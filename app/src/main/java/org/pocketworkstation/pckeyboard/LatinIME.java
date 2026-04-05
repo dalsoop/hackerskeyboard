@@ -2138,13 +2138,15 @@ public class LatinIME extends InputMethodService implements
         if (mHangulComposer.isComposing()) {
             if (mHangulComposer.backspace()) {
                 if (mHangulComposer.isComposing()) {
+                    // Update composing text with decomposed jamo
                     mHangulComposing.setLength(0);
                     mHangulComposing.append(mHangulComposer.getComposing());
                     ic.setComposingText(mHangulComposing, 1);
                 } else {
+                    // Fully deleted: clear composing region
                     mHangulComposing.setLength(0);
+                    ic.setComposingText("", 1);
                     ic.finishComposingText();
-                    ic.deleteSurroundingText(1, 0);
                 }
             }
             ic.endBatchEdit();
@@ -2374,20 +2376,29 @@ public class LatinIME extends InputMethodService implements
 
         ic.beginBatchEdit();
 
-        String prevComposing = mHangulComposer.isComposing() ? mHangulComposer.getComposing() : null;
+        boolean wasComposing = mHangulComposer.isComposing();
         String commitText = mHangulComposer.process(code);
 
         if (commitText != null && commitText.length() > 0) {
-            // Completed syllable: finish current composing, then commit
+            // GaroKeypad pattern: finishComposingText to commit the completed syllable,
+            // then start new composing for next syllable. Never use commitText().
+            if (wasComposing) {
+                // Update composing to the completed syllable, then finish it
+                mHangulComposing.setLength(0);
+                mHangulComposing.append(commitText);
+                ic.setComposingText(mHangulComposing, 1);
+                ic.finishComposingText();
+            }
             mHangulComposing.setLength(0);
-            ic.finishComposingText();
-            ic.commitText(commitText, 1);
         }
 
         // Set new composing text for current in-progress syllable
         if (mHangulComposer.isComposing()) {
             String composing = mHangulComposer.getComposing();
-            mHangulComposing.setLength(0);
+            if (mHangulComposing.length() > 0) {
+                // HCURSOR_UPDATE pattern: replace in-place
+                mHangulComposing.setLength(0);
+            }
             mHangulComposing.append(composing);
             ic.setComposingText(mHangulComposing, 1);
         }
@@ -2399,11 +2410,13 @@ public class LatinIME extends InputMethodService implements
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
         String text = mHangulComposer.commit();
-        mHangulComposing.setLength(0);
         if (text != null && text.length() > 0) {
+            mHangulComposing.setLength(0);
+            mHangulComposing.append(text);
+            ic.setComposingText(mHangulComposing, 1);
             ic.finishComposingText();
-            ic.commitText(text, 1);
         }
+        mHangulComposing.setLength(0);
     }
 
     private void handleSeparator(int primaryCode) {
