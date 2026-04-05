@@ -64,6 +64,7 @@ public class InputLanguageSelection extends PreferenceActivity {
     // Languages which should not auto-add space after completions
     public static final Set<String> NOAUTOSPACE_LANGUAGES = new HashSet<String>();
     static {
+        NOAUTOSPACE_LANGUAGES.add("ko");
         NOAUTOSPACE_LANGUAGES.add("th");
     }
 
