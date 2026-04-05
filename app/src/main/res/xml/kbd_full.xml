@@ -361,7 +361,8 @@
             android:keyEdgeFlags="left"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_f1"
+            android:codes="@integer/key_next_language"
+            android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_alt_left"
