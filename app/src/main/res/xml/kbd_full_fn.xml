@@ -292,17 +292,12 @@
             android:shiftLabel="@string/key_space_shift"
             android:keyIcon="@drawable/sym_keyboard_space"
             android:iconPreview="@drawable/sym_keyboard_feedback_space"
-            android:keyWidth="32.1428571372%p"
+            android:keyWidth="39.2857142857%p"
             android:isModifier="true" />
         <Key
             android:codes="@integer/key_fn"
             android:keyLabel="Fn"
             android:isModifier="true" />
-        <Key
-            android:codes="@integer/key_dpad_center"
-            android:isModifier="true"
-            android:isCursor="true"
-            android:keyLabel="&#x25cb;" />
         <Key
             android:codes="@integer/key_dpad_left"
             android:isModifier="true"
