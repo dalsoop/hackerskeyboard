@@ -20,8 +20,8 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/org.pocketworkstation.pckeyboard"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- <string name="english_ime_name" msgid="7252517407088836577">"Android 키보드"</string> -->
-    <!-- <string name="english_ime_settings" msgid="6661589557206947774">"Android 키보드 설정"</string> -->
+    <string name="english_ime_name">Hacker\'s Keyboard</string>
+    <string name="english_ime_settings">Hacker\'s Keyboard 설정</string>
     <string name="english_ime_input_options" msgid="3909945612939668554">"입력 옵션"</string>
     <string name="vibrate_on_keypress" msgid="5258079494276955460">"키를 누를 때 진동 발생"</string>
     <string name="sound_on_keypress" msgid="6093592297198243644">"키를 누를 때 소리 발생"</string>
@@ -52,9 +52,11 @@
     <string name="settings_key_mode_auto_name" msgid="2993460277873684680">"자동"</string>
     <string name="settings_key_mode_always_show_name" msgid="3047567041784760575">"항상 표시"</string>
     <string name="settings_key_mode_always_hide_name" msgid="7833948046716923994">"항상 숨기기"</string>
-    <!-- no translation found for settings_key_modes:0 (8549888726962891527) -->
-    <!-- no translation found for settings_key_modes:1 (881280041213210923) -->
-    <!-- no translation found for settings_key_modes:2 (7317310620171067848) -->
+    <string-array name="settings_key_modes">
+        <item>@string/settings_key_mode_auto_name</item>
+        <item>@string/settings_key_mode_always_show_name</item>
+        <item>@string/settings_key_mode_always_hide_name</item>
+    </string-array>
     <string name="bigram_suggestion" msgid="1323347224043514969">"Bigram 추천"</string>
     <string name="bigram_suggestion_summary" msgid="4383845146070101531">"이전 단어를 사용하여 추천 기능 개선"</string>
   <string-array name="prediction_modes">
@@ -120,11 +122,11 @@
     <string name="close_the_keyboard" msgid="6251022259044940103"><font size="17"><b>"키보드 닫기"\n</b></font><font size="3">\n</font>"\'뒤로\' 키를 누르세요."</string>
     <string name="touch_and_hold" msgid="6154166367273010534"><font size="17"><b>"키를 길게 눌러 옵션 보기"\n</b></font><font size="3">\n</font>"문장 부호 및 악센트 기호 입력창이 열립니다."</string>
     <string name="keyboard_settings" msgid="4585753477617374032"><font size="17"><b>"키보드 설정"\n</b></font><font size="3">\n</font><b>"?123"</b>" 키를 길게 누르세요."</string>
-    <string name="popular_domain_0" msgid="3745279225122472969">".com"</string>
-    <string name="popular_domain_1" msgid="1370572248164278467">".net"</string>
-    <string name="popular_domain_2" msgid="3036812463748402878">".org"</string>
-    <string name="popular_domain_3" msgid="8718639560809452028">".gov"</string>
-    <string name="popular_domain_4" msgid="35359437471311470">".edu"</string>
+    <string name="popular_domain_0">".kr"</string>
+    <string name="popular_domain_1">".com"</string>
+    <string name="popular_domain_2">".co.kr"</string>
+    <string name="popular_domain_3">".net"</string>
+    <string name="popular_domain_4">".org"</string>
     <string name="selectInputMethod" msgid="315076553378705821">"입력 방법 선택"</string>
     <string name="language_selection_title" msgid="1651299598555326750">"입력 언어"</string>
     <string name="language_selection_summary" msgid="187110938289512256">"손가락을 스페이스바에서 미끄러지듯 움직여 언어 변경"</string>
@@ -299,4 +301,91 @@
         <p>자세한 정보는 <a href='https://github.com/klausw/hackerskeyboard'>프로젝트 웹 페이지</a>를 참고하세요.</p>
       "]]>
     </Data></string>
+
+    <!-- 키보드 모드 -->
+    <string-array name="keyboard_mode_entries">
+        <item>4행 Gingerbread 레이아웃</item>
+        <item>5행 컴팩트 레이아웃 (US QWERTY 전용)</item>
+        <item>5행 전체 레이아웃</item>
+    </string-array>
+
+    <!-- Ctrl-A 오버라이드 -->
+    <string-array name="ctrl_a_override_entries">
+        <item>Ctrl-A 비활성화, Ctrl-Alt-A 대신 사용</item>
+        <item>Ctrl-A 완전 비활성화</item>
+        <item>Ctrl-A 사용 (오버라이드 없음)</item>
+    </string-array>
+
+    <!-- 수식키 -->
+    <string-array name="chording_ctrl_key_entries">
+        <item>없음 (다른 키 수식 시에만 동작)</item>
+        <item>왼쪽 Ctrl</item>
+        <item>오른쪽 Ctrl</item>
+    </string-array>
+    <string-array name="chording_alt_key_entries">
+        <item>없음 (다른 키 수식 시에만 동작)</item>
+        <item>왼쪽 Alt</item>
+        <item>오른쪽 Alt</item>
+    </string-array>
+    <string-array name="chording_meta_key_entries">
+        <item>없음 (다른 키 수식 시에만 동작)</item>
+        <item>왼쪽 Meta</item>
+        <item>오른쪽 Meta</item>
+    </string-array>
+
+    <!-- 힌트 라벨 -->
+    <string-array name="hint_modes">
+        <item>힌트 라벨 숨기기</item>
+        <item>ASCII 구두점 표시</item>
+        <item>모든 힌트 라벨 표시</item>
+    </string-array>
+
+    <!-- 슬라이드 키 -->
+    <string-array name="slide_keys_entries">
+        <item>슬라이드 중 키 무시 (권장)</item>
+        <item>처음 터치한 키 전송</item>
+        <item>마지막 터치한 키 전송</item>
+        <item>처음과 마지막 키 전송</item>
+        <item>슬라이드 중 모든 키 전송</item>
+    </string-array>
+
+    <!-- 클릭 볼륨 -->
+    <string-array name="click_method_entries">
+        <item>시스템 기본 (클릭 볼륨 무시)</item>
+        <item>절대 클릭 볼륨</item>
+        <item>미디어 볼륨 따름</item>
+        <item>미디어 볼륨 반전</item>
+    </string-array>
+
+    <!-- 렌더링 -->
+    <string-array name="render_mode_entries">
+        <item>직접 그리기 (메모리 절약)</item>
+        <item>소프트웨어 버퍼링 (기본)</item>
+        <item>하드웨어 가속 (실험적)</item>
+    </string-array>
+
+    <!-- 팝업 내용 -->
+    <string-array name="popup_content_entries">
+        <item>팝업 없음</item>
+        <item>팝업 없음, 자동 반복 사용</item>
+        <item>고유 문자만: 3 &#x21d2; ³, e &#x21d2; é</item>
+        <item>Shift 추가: 3 &#x21d2; #³, e &#x21d2; é</item>
+        <item>대문자 추가: 3 &#x21d2; #³, e &#x21d2; Eé</item>
+        <item>자기 자신 추가: 3 &#x21d2; 3#³, e &#x21d2; eEé</item>
+    </string-array>
+
+    <!-- 스와이프 동작 -->
+    <string-array name="swipe_action_entries">
+        <item>(동작 없음)</item>
+        <item>키보드 닫기</item>
+        <item>확장 행 토글</item>
+        <item>설정 열기</item>
+        <item>추천 단어 토글</item>
+        <item>음성 입력</item>
+        <item>키보드 레이아웃 전환</item>
+        <item>높이 늘리기</item>
+        <item>높이 줄이기</item>
+        <item>이전 언어</item>
+        <item>다음 언어</item>
+    </string-array>
 </resources>
