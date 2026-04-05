@@ -1884,6 +1884,25 @@ public class LatinIME extends InputMethodService implements
                     // Try workaround for issue 179 where letters don't get upcased
                     ic.commitText(Character.toString(ch), 1);
                     handleModifierKeysUp(false, false);
+                } else if ((ch == 'c' || ch == 'C') && mModCtrl && !mModAlt && !mModMeta) {
+                    // Ctrl+C: copy (use performContextMenuAction for universal app support)
+                    if (mHangulComposer.isComposing()) commitHangulComposing();
+                    ic.performContextMenuAction(android.R.id.copy);
+                    handleModifierKeysUp(false, false);
+                } else if ((ch == 'v' || ch == 'V') && mModCtrl && !mModAlt && !mModMeta) {
+                    // Ctrl+V: paste
+                    if (mHangulComposer.isComposing()) commitHangulComposing();
+                    ic.performContextMenuAction(android.R.id.paste);
+                    handleModifierKeysUp(false, false);
+                } else if ((ch == 'x' || ch == 'X') && mModCtrl && !mModAlt && !mModMeta) {
+                    // Ctrl+X: cut
+                    if (mHangulComposer.isComposing()) commitHangulComposing();
+                    ic.performContextMenuAction(android.R.id.cut);
+                    handleModifierKeysUp(false, false);
+                } else if ((ch == 'z' || ch == 'Z') && mModCtrl && !mModAlt && !mModMeta) {
+                    // Ctrl+Z: undo
+                    sendModifiedKeyDownUp(KeyEvent.KEYCODE_Z, false);
+                    handleModifierKeysUp(false, false);
                 } else if ((ch == 'a' || ch == 'A') && mModCtrl) {
                     // Special case for Ctrl-A to work around accidental select-all-then-replace.
                     if (sKeyboardSettings.ctrlAOverride == 0) {
@@ -1910,8 +1929,9 @@ public class LatinIME extends InputMethodService implements
                         sendModifierKeysUp(shifted);
                         return;  // ignore the key
                     } else {
-                        // Standard Ctrl-A behavior.
-                        sendModifiedKeyDownUp(code, shifted);
+                        // Standard Ctrl-A behavior - use performContextMenuAction for compatibility
+                        if (mHangulComposer.isComposing()) commitHangulComposing();
+                        ic.performContextMenuAction(android.R.id.selectAll);
                     }
                 } else {
                     sendModifiedKeyDownUp(code, shifted);
