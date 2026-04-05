@@ -390,7 +390,7 @@
     </string-array>
 
     <!-- 액션 툴바 -->
-    <string name="label_lang_switch">≡</string>
+    <string name="label_lang_switch">&#x1F310;</string>
     <string name="action_select_all">전체선택</string>
     <string name="action_cut">잘라내기</string>
     <string name="action_copy">복사</string>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard
+    xmlns:android="http://schemas.android.com/apk/res-auto"
+    android:keyWidth="14.28%p"
+    android:horizontalGap="0px"
+    android:verticalGap="0px"
+    android:keyHeight="@dimen/popup_key_height"
+>
+    <Row android:rowEdgeFlags="top">
+        <Key android:keyLabel="&#x1F600;" android:keyOutputText="&#x1F600;" android:keyEdgeFlags="left" />
+        <Key android:keyLabel="&#x1F602;" android:keyOutputText="&#x1F602;" />
+        <Key android:keyLabel="&#x1F60D;" android:keyOutputText="&#x1F60D;" />
+        <Key android:keyLabel="&#x1F622;" android:keyOutputText="&#x1F622;" />
+        <Key android:keyLabel="&#x1F44D;" android:keyOutputText="&#x1F44D;" />
+        <Key android:keyLabel="&#x1F44E;" android:keyOutputText="&#x1F44E;" />
+        <Key android:keyLabel="&#x2764;" android:keyOutputText="&#x2764;" android:keyEdgeFlags="right" />
+    </Row>
+    <Row>
+        <Key android:keyLabel="&#x1F44B;" android:keyOutputText="&#x1F44B;" android:keyEdgeFlags="left" />
+        <Key android:keyLabel="&#x1F44F;" android:keyOutputText="&#x1F44F;" />
+        <Key android:keyLabel="&#x1F64F;" android:keyOutputText="&#x1F64F;" />
+        <Key android:keyLabel="&#x1F60E;" android:keyOutputText="&#x1F60E;" />
+        <Key android:keyLabel="&#x1F621;" android:keyOutputText="&#x1F621;" />
+        <Key android:keyLabel="&#x1F525;" android:keyOutputText="&#x1F525;" />
+        <Key android:keyLabel="&#x1F389;" android:keyOutputText="&#x1F389;" android:keyEdgeFlags="right" />
+    </Row>
+    <Row android:rowEdgeFlags="bottom">
+        <Key android:keyLabel="&#x2705;" android:keyOutputText="&#x2705;" android:keyEdgeFlags="left" />
+        <Key android:keyLabel="&#x274C;" android:keyOutputText="&#x274C;" />
+        <Key android:keyLabel="&#x2B50;" android:keyOutputText="&#x2B50;" />
+        <Key android:keyLabel="&#x1F4A1;" android:keyOutputText="&#x1F4A1;" />
+        <Key android:keyLabel="&#x1F4AC;" android:keyOutputText="&#x1F4AC;" />
+        <Key android:keyLabel="&#x1F648;" android:keyOutputText="&#x1F648;" />
+        <Key android:keyLabel="&#x1F680;" android:keyOutputText="&#x1F680;" android:keyEdgeFlags="right" />
+    </Row>
+</Keyboard>
