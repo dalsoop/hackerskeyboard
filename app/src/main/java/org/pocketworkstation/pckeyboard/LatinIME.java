@@ -1270,6 +1270,9 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void commitTyped(InputConnection inputConnection, boolean manual) {
+        if (mHangulComposer.isComposing()) {
+            commitHangulComposing();
+        }
         if (mPredicting) {
             mPredicting = false;
             if (mComposing.length() > 0) {
@@ -1963,32 +1966,38 @@ public class LatinIME extends InputMethodService implements
         case Keyboard.KEYCODE_MODE_CHANGE:
             // Symbol key is handled in onPress() when device has distinct
             // multi-touch panel.
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (!distinctMultiTouch)
                 changeKeyboardMode();
             break;
         case LatinKeyboardView.KEYCODE_CTRL_LEFT:
             // Ctrl key is handled in onPress() when device has distinct
             // multi-touch panel.
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (!distinctMultiTouch)
                 setModCtrl(!mModCtrl);
             break;
         case LatinKeyboardView.KEYCODE_ALT_LEFT:
             // Alt key is handled in onPress() when device has distinct
             // multi-touch panel.
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (!distinctMultiTouch)
                 setModAlt(!mModAlt);
             break;
         case LatinKeyboardView.KEYCODE_META_LEFT:
             // Meta key is handled in onPress() when device has distinct
             // multi-touch panel.
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (!distinctMultiTouch)
                 setModMeta(!mModMeta);
             break;
         case LatinKeyboardView.KEYCODE_FN:
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (!distinctMultiTouch)
                 setModFn(!mModFn);
             break;
         case Keyboard.KEYCODE_CANCEL:
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (!isShowingOptionDialog()) {
                 handleClose();
             }
@@ -2010,6 +2019,7 @@ public class LatinIME extends InputMethodService implements
             toggleLanguage(false, false);
             break;
         case LatinKeyboardView.KEYCODE_VOICE:
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (mVoiceRecognitionTrigger.isInstalled()) {
                 mVoiceRecognitionTrigger.startVoiceRecognition();
             }
