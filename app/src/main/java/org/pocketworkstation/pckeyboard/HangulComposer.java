@@ -10,8 +10,6 @@
  */
 package org.pocketworkstation.pckeyboard;
 
-import android.view.inputmethod.InputConnection;
-
 public class HangulComposer {
 
     // Unicode Hangul Jamo ranges

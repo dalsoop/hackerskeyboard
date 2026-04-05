@@ -2016,12 +2016,14 @@ public class LatinIME extends InputMethodService implements
             //startListening(false /* was a button press, was not a swipe */);
             break;
         case 9 /* Tab */:
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (processMultiKey(primaryCode)) {
                 break;
             }
             sendTab();
             break;
         case LatinKeyboardView.KEYCODE_ESCAPE:
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (processMultiKey(primaryCode)) {
                 break;
             }
@@ -2054,6 +2056,7 @@ public class LatinIME extends InputMethodService implements
         case LatinKeyboardView.KEYCODE_BREAK:
         case LatinKeyboardView.KEYCODE_NUM_LOCK:
         case LatinKeyboardView.KEYCODE_SCROLL_LOCK:
+            if (mHangulComposer.isComposing()) commitHangulComposing();
             if (processMultiKey(primaryCode)) {
                 break;
             }
@@ -2093,6 +2096,7 @@ public class LatinIME extends InputMethodService implements
 
     public void onText(CharSequence text) {
         //mDeadAccentBuffer.clear();  // FIXME
+        if (mHangulComposer.isComposing()) commitHangulComposing();
         InputConnection ic = getCurrentInputConnection();
         if (ic == null)
             return;
