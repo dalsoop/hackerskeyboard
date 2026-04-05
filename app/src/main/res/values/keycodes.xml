@@ -64,4 +64,5 @@
     <integer name="key_fkey_f12">-142</integer>
     <integer name="key_num_lock">-143</integer>
     <integer name="key_next_language">-104</integer>
+    <integer name="key_ime_picker">-200</integer>
 </resources>

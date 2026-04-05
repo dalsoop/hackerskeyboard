@@ -151,7 +151,7 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -185,7 +185,7 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -219,7 +219,7 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -253,7 +253,7 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -288,7 +288,7 @@
             android:isModifier="true"
             android:keyEdgeFlags="left" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -332,7 +332,7 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -371,7 +371,7 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -410,7 +410,7 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -449,7 +449,7 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
@@ -489,7 +489,7 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_settings"
             android:isModifier="true" />
         <Key
-            android:codes="@integer/key_next_language"
+            android:codes="@integer/key_ime_picker"
             android:keyLabel="@string/label_lang_switch"
             android:isModifier="true" />
         <Key
