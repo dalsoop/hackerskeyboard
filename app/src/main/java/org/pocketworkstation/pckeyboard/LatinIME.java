@@ -950,6 +950,7 @@ public class LatinIME extends InputMethodService implements
     public void onFinishInput() {
         super.onFinishInput();
 
+        mHangulComposer.reset();
         onAutoCompletionStateChanged(false);
 
         if (mKeyboardSwitcher.getInputView() != null) {
@@ -984,10 +985,11 @@ public class LatinIME extends InputMethodService implements
 
         // If the current selection in the text view changes, we should
         // clear whatever candidate text we have.
-        if ((((mComposing.length() > 0 && mPredicting))
+        if ((((mComposing.length() > 0 && mPredicting) || mHangulComposer.isComposing())
                 && (newSelStart != candidatesEnd || newSelEnd != candidatesEnd) && mLastSelectionStart != newSelStart)) {
             mComposing.setLength(0);
             mPredicting = false;
+            mHangulComposer.reset();
             postUpdateSuggestions();
             TextEntryState.reset();
             InputConnection ic = getCurrentInputConnection();
@@ -2364,17 +2366,24 @@ public class LatinIME extends InputMethodService implements
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
 
+        ic.beginBatchEdit();
+
         String commitText = mHangulComposer.process(code);
 
-        // Commit any completed syllable
+        // Commit any completed syllable first
         if (commitText != null && commitText.length() > 0) {
+            ic.finishComposingText();
             ic.commitText(commitText, 1);
         }
 
         // Update composing text with current state
         if (mHangulComposer.isComposing()) {
             ic.setComposingText(mHangulComposer.getComposing(), 1);
+        } else {
+            ic.finishComposingText();
         }
+
+        ic.endBatchEdit();
     }
 
     private void commitHangulComposing() {
@@ -2382,6 +2391,7 @@ public class LatinIME extends InputMethodService implements
         if (ic == null) return;
         String text = mHangulComposer.commit();
         if (text != null && text.length() > 0) {
+            ic.finishComposingText();
             ic.commitText(text, 1);
         }
     }
