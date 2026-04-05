@@ -137,4 +137,166 @@
     <string name="keyboard_layout" msgid="437433231038683666">"키보드 테마"</string>
     <string name="subtype_mode_keyboard" msgid="2242090416595003881">"키보드"</string>
     <string name="subtype_mode_voice" msgid="4394113125441627771">"음성"</string>
+
+    <!-- 설정 화면 제목 -->
+    <string name="title_keyboard_view_settings">키보드 표시 설정</string>
+    <string name="title_keyboard_height_portrait">키보드 높이 (세로)</string>
+    <string name="title_keyboard_height_landscape">키보드 높이 (가로)</string>
+    <string name="title_key_layout_options">키 배열 옵션</string>
+    <string name="title_key_behavior_settings">키 동작 설정</string>
+    <string name="title_long_press_alternate_keys">길게 누르기 대체 키</string>
+    <string name="title_suggested_punctuation">추천 구두점</string>
+    <string name="title_input_mode_settings">입력 모드 설정</string>
+    <string name="title_debugging">디버깅</string>
+    <string name="title_input_connection_details">입력 연결 상세</string>
+    <string name="title_version">버전</string>
+    <string name="title_swipe_gestures">스와이프 제스처 (실험적)</string>
+    <string name="title_hardware_key_actions">하드웨어 키 동작</string>
+
+    <!-- 키보드 피드백 설정 -->
+    <string name="pref_screen_feedback_title">키 피드백 설정</string>
+    <string name="pref_screen_feedback_title_summary">키 소리, 진동, 미리보기 팝업 등 설정</string>
+
+    <!-- 테마 및 라벨 설정 -->
+    <string name="pref_screen_view_title">테마 및 라벨 설정</string>
+    <string name="pref_screen_view_title_summary">테마와 라벨 표시 설정</string>
+
+    <!-- 키보드 모드 -->
+    <string name="title_keyboard_mode_portrait">키보드 모드 (세로)</string>
+    <string name="title_keyboard_mode_landscape">키보드 모드 (가로)</string>
+
+    <!-- Ctrl-A 오버라이드 -->
+    <string name="title_ctrl_a_override">Ctrl-A (전체 선택) 오버라이드</string>
+    <string name="toast_ctrl_a_override_info">Ctrl-A가 비활성화되었습니다. Ctrl-Alt-A를 사용하거나 설정에서 활성화하세요.</string>
+
+    <!-- 수식키 설정 -->
+    <string name="title_chording_ctrl_key">Ctrl 키 코드</string>
+    <string name="title_chording_alt_key">Alt 키 코드</string>
+    <string name="title_chording_meta_key">Meta 키 코드</string>
+
+    <!-- 가로 모드 추천 -->
+    <string name="title_suggestions_in_landscape">가로 모드 추천 단어</string>
+    <string name="summary_suggestions_in_landscape_true">세로 모드와 동일</string>
+    <string name="summary_suggestions_in_landscape_false">가로 모드에서 추천 단어 숨기기</string>
+
+    <!-- 전체 화면 -->
+    <string name="title_fullscreen_override">가로 모드 전체 화면 편집기</string>
+    <string name="summary_fullscreen_override_true">비활성화, 기본 보기 사용</string>
+    <string name="summary_fullscreen_override_false">작은 기기에서 활성화</string>
+
+    <!-- 소프트 키보드 표시 -->
+    <string name="title_force_keyboard_on">소프트 키보드 표시</string>
+    <string name="summary_force_keyboard_on_true">항상</string>
+    <string name="summary_force_keyboard_on_false">하드웨어 키보드가 없을 때만</string>
+
+    <!-- 알림 -->
+    <string name="title_keyboard_notification">고정 알림 사용</string>
+    <string name="summary_keyboard_notification_true">알림을 탭하여 키보드 활성화</string>
+    <string name="summary_keyboard_notification_false">알림 없음</string>
+    <string name="notification_channel_name">Hacker\'s Keyboard</string>
+    <string name="notification_channel_description">Hacker\'s Keyboard</string>
+    <string name="notification_action_settings">설정</string>
+
+    <!-- 앱별 설정 -->
+    <string name="title_application_category">앱별 설정</string>
+    <string name="title_connectbot_tab_hack">ConnectBot 탭 키 모드</string>
+    <string name="summary_connectbot_tab_hack_true">호환성 해결 활성화</string>
+    <string name="summary_connectbot_tab_hack_false">일반 Tab 키 이벤트 전송</string>
+
+    <!-- Caps Lock -->
+    <string name="title_caps_lock">Shift 두 번 탭 모드</string>
+    <string name="summary_caps_lock_true">Caps Lock (q1 => Q1)</string>
+    <string name="summary_caps_lock_false">Shift Lock (q1 => Q!)</string>
+
+    <string name="title_shift_lock_modifiers">Shift Lock을 수식키에도 적용?</string>
+    <string name="summary_shift_lock_modifiers_true">예, 방향키 포함</string>
+    <string name="summary_shift_lock_modifiers_false">아니오, 일반 키만</string>
+
+    <!-- 힌트 모드 -->
+    <string name="title_hint_mode">대체 키 라벨</string>
+
+    <!-- 터치 디버그 -->
+    <string name="title_touch_pos">터치 위치 디버그</string>
+    <string name="summary_touch_pos_true">터치 위치 피드백 표시</string>
+    <string name="summary_touch_pos_false">끔</string>
+
+    <!-- 슬라이드 키 -->
+    <string name="title_slide_keys">슬라이드 키 이벤트</string>
+
+    <!-- 크기 조정 -->
+    <string name="title_top_row_scale">5번째 행 높이 조정</string>
+    <string name="title_label_scale">키 라벨 크기</string>
+    <string name="title_candidate_scale">추천 단어 라벨 크기</string>
+    <string name="title_vibrate_len">진동 길이</string>
+    <string name="title_click_volume">키 클릭 볼륨</string>
+    <string name="title_click_method">클릭 볼륨 제어 방식</string>
+    <string name="title_long_press_duration">길게 누르기 시간</string>
+
+    <!-- 렌더링 -->
+    <string name="title_render_mode">그리기 방법</string>
+    <string name="render_mode_unavailable">(이 기기에서 변경 불가)</string>
+
+    <!-- 팝업 -->
+    <string name="title_popup_content">팝업 미니 키보드 내용</string>
+
+    <!-- 제스처/키 동작 -->
+    <string name="pref_screen_actions_title">제스처 및 키 동작</string>
+    <string name="pref_screen_actions_title_summary">스와이프 제스처와 하드웨어 키 동작 설정</string>
+    <string name="title_swipe_up">위로 스와이프</string>
+    <string name="title_swipe_down">아래로 스와이프</string>
+    <string name="title_swipe_left">왼쪽 스와이프</string>
+    <string name="title_swipe_right">오른쪽 스와이프</string>
+    <string name="title_vol_up">볼륨 업</string>
+    <string name="title_vol_down">볼륨 다운</string>
+
+    <!-- 경고 -->
+    <string name="voice_not_enabled_warning">이 버전에서는 음성 입력을 사용할 수 없습니다.</string>
+    <string name="recorrect_warning">참고: 진저브레드 이전 기기에서는 OS 지원 부족으로 재수정이 정상 동작하지 않습니다.</string>
+    <string name="no_market_warning">Play 스토어를 열 수 없습니다.</string>
+
+    <!-- 메인 설정 화면 -->
+    <string name="main_setup_configure_imes">키보드 활성화</string>
+    <string name="main_setup_set_ime">입력 방법 선택</string>
+    <string name="main_setup_get_dicts">더보기</string>
+    <string name="main_setup_input_lang">입력 언어</string>
+    <string name="main_setup_settings">설정</string>
+    <string name="main_setup_test">테스트</string>
+    <string name="text_test">테스트</string>
+
+    <string name="main_body"><Data>
+      <![CDATA["
+        <h2>Hacker's Keyboard 활성화</h2>
+
+        <p><i>Hacker's Keyboard</i>는 새로운 Android 입력기입니다. 보안상의 이유로 <b>기본적으로 비활성화</b>되어 있으며, Android는 앱이 입력 방법 설정을 변경하는 것을 허용하지 않습니다. 아래 단계를 따라 활성화하세요.</p>
+
+        <h3>시스템 입력 방법 목록에 키보드 추가:</h3>
+        <blockquote>
+          <p>&#8226; 위의 <b>키보드 활성화</b> 버튼을 눌러 시스템 입력 설정을 여세요.</p>
+          <p>&#8226; 입력 방법 목록에서 <i>Hacker's Keyboard</i>를 찾아 체크하세요.</p>
+          <p>&#8226; 시스템 경고를 확인하세요. 서드파티 입력 방법을 활성화할 때 항상 표시됩니다.</p>
+          <p>&#8226; <i>뒤로</i> 버튼을 눌러 이 페이지로 돌아오세요.</p>
+        </blockquote>
+
+        <h3>현재 입력 방법 선택:</h3>
+        <blockquote>
+          <p>&#8226; 위의 <b>입력 방법 선택</b> 버튼을 누르세요.</p>
+          <p>&#8226; 목록에서 <i>Hacker's Keyboard</i>를 선택하세요.</p>
+        </blockquote>
+
+        <h3>선택사항: 입력 언어 선택:</h3>
+        <blockquote>
+          <p>&#8226; 위의 <b>입력 언어</b> 버튼을 눌러 사용할 키보드 레이아웃을 선택하세요. 시스템 기본 언어가 아닌 다른 언어나 레이아웃을 사용하려면 <b>반드시</b> 설정해야 합니다.</p>
+          <p>&#8226; <i>뒤로</i> 버튼을 눌러 이 페이지로 돌아오세요.</p>
+          <p>&#8226; 입력 시 스페이스바를 좌우로 밀어 선택한 레이아웃 간에 전환하세요.</p>
+        </blockquote>
+
+        <h3>선택사항: 자동 완성 사전 설치:</h3>
+        <blockquote>
+          <p>&#8226; 위의 <b>더보기</b> 버튼을 눌러 Play 스토어에서 무료 자동 완성 사전 패키지를 검색하세요.</p>
+        </blockquote>
+
+        <h2>추가 정보</h2>
+        <p>자세한 정보는 <a href='https://github.com/klausw/hackerskeyboard'>프로젝트 웹 페이지</a>를 참고하세요.</p>
+      "]]>
+    </Data></string>
 </resources>
