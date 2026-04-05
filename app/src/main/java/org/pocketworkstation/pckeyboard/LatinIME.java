@@ -2331,6 +2331,10 @@ public class LatinIME extends InputMethodService implements
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         // Hangul composition: intercept jamo input
         if (HangulComposer.isHangulJamo(primaryCode)) {
+            // If prediction was active (from English mode), commit it first
+            if (mPredicting) {
+                commitTyped(getCurrentInputConnection(), false);
+            }
             handleHangulCharacter(primaryCode);
             // Reset shift after typing a Hangul jamo (one-shot shift like Gboard)
             updateShiftKeyState(getCurrentInputEditorInfo());
