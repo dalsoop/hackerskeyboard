@@ -2564,10 +2564,10 @@ public class LatinIME extends InputMethodService implements
         String text = mHangulComposer.commit();
         mHangulComposing.setLength(0);
         if (text != null && text.length() > 0) {
-            // Use commitText for final commit (Enter, separator, mode switch etc.)
-            // This atomically replaces the composing region and commits in one step,
-            // preventing the last character from jumping to the next line on Enter.
+            ic.finishComposingText();
             ic.commitText(text, 1);
+        } else {
+            ic.finishComposingText();
         }
     }
 
@@ -2628,19 +2628,28 @@ public class LatinIME extends InputMethodService implements
                 }
             }
         });
-        AlertDialog dialog = builder.create();
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG);
-            IBinder token = mKeyboardSwitcher.getInputView() != null
-                    ? mKeyboardSwitcher.getInputView().getWindowToken() : null;
-            if (token != null) {
-                WindowManager.LayoutParams lp = window.getAttributes();
-                lp.token = token;
-                window.setAttributes(lp);
+        try {
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            if (window != null) {
+                window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG);
+                if (mKeyboardSwitcher.getInputView() != null) {
+                    IBinder token = mKeyboardSwitcher.getInputView().getWindowToken();
+                    if (token != null) {
+                        WindowManager.LayoutParams lp = window.getAttributes();
+                        lp.token = token;
+                        window.setAttributes(lp);
+                    }
+                }
+            }
+            dialog.show();
+        } catch (Exception e) {
+            // Fallback: just paste the first item directly
+            if (!items.isEmpty()) {
+                InputConnection ic = getCurrentInputConnection();
+                if (ic != null) ic.commitText(items.get(0), 1);
             }
         }
-        dialog.show();
     }
 
     private static final String[] EMOJI_LIST = {
@@ -2667,19 +2676,24 @@ public class LatinIME extends InputMethodService implements
                 }
             }
         });
-        AlertDialog dialog = builder.create();
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG);
-            IBinder token = mKeyboardSwitcher.getInputView() != null
-                    ? mKeyboardSwitcher.getInputView().getWindowToken() : null;
-            if (token != null) {
-                WindowManager.LayoutParams lp = window.getAttributes();
-                lp.token = token;
-                window.setAttributes(lp);
+        try {
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            if (window != null) {
+                window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG);
+                if (mKeyboardSwitcher.getInputView() != null) {
+                    IBinder token = mKeyboardSwitcher.getInputView().getWindowToken();
+                    if (token != null) {
+                        WindowManager.LayoutParams lp = window.getAttributes();
+                        lp.token = token;
+                        window.setAttributes(lp);
+                    }
+                }
             }
+            dialog.show();
+        } catch (Exception e) {
+            // Silently fail if dialog can't be shown
         }
-        dialog.show();
     }
 
     private void updateActionToolbarVisibility(boolean hasSuggestions) {
