@@ -283,9 +283,8 @@
             hackkbd:isSticky="true"
             hackkbd:isModifier="true" />
         <Key
-            hackkbd:codes="@integer/key_meta_left"
-            hackkbd:keyLabel="&#x2756;"
-            hackkbd:isSticky="true"
+            hackkbd:codes="@integer/key_emoji"
+            hackkbd:keyLabel="@string/action_emoji"
             hackkbd:isModifier="true" />
         <Key
             hackkbd:codes="@integer/key_space"

@@ -68,4 +68,5 @@
     <integer name="key_clipboard">-201</integer>
     <integer name="key_undo">-202</integer>
     <integer name="key_redo">-203</integer>
+    <integer name="key_emoji">-204</integer>
 </resources>

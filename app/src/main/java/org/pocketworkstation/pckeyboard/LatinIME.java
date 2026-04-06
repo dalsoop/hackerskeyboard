@@ -2079,6 +2079,10 @@ public class LatinIME extends InputMethodService implements
         case LatinKeyboardView.KEYCODE_OPTIONS_LONGPRESS:
             onOptionKeyLongPressed();
             break;
+        case -204: // key_emoji
+            if (mHangulComposer.isComposing()) commitHangulComposing();
+            showEmojiPopup(mKeyboardSwitcher.getInputView());
+            break;
         case -201: // key_clipboard
             if (mHangulComposer.isComposing()) commitHangulComposing();
             showClipboardPopup(mKeyboardSwitcher.getInputView());
