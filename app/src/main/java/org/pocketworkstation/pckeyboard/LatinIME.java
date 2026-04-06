@@ -183,6 +183,7 @@ public class LatinIME extends InputMethodService implements
     private int mCommittedLength;
     private boolean mPredicting;
     private HangulComposer mHangulComposer = new HangulComposer();
+    private boolean mShiftSelecting = false; // Shift+Arrow text selection mode
     private boolean mEnableVoiceButton;
     private CharSequence mBestWord;
     private boolean mPredictionOnForMode;
@@ -1713,13 +1714,16 @@ public class LatinIME extends InputMethodService implements
 
     private void sendSpecialKey(int code) {
         if (!isConnectbot()) {
-            boolean wasShifted = isShiftMod();
+            boolean shifted = isShiftMod() || mShiftSelecting;
             commitTyped(getCurrentInputConnection(), true);
-            sendModifiedKeyDownUp(code);
-            // Re-activate shift after navigation keys so repeated taps keep selecting.
-            // Non-navigation keys (characters etc.) won't re-activate, so shift resets.
-            if (wasShifted && isNavigationKey(code)) {
+            if (shifted && isNavigationKey(code)) {
+                // Shift+NavKey: send with shift, keep selection mode
+                sendModifiedKeyDownUp(code, true);
+                mShiftSelecting = true;
                 handleShiftInternal(true, Keyboard.SHIFT_ON);
+            } else {
+                mShiftSelecting = false;
+                sendModifiedKeyDownUp(code);
             }
             return;
         }
@@ -2390,6 +2394,12 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleShift() {
+        if (mShiftSelecting) {
+            // Exit selection mode: turn off shift
+            mShiftSelecting = false;
+            handleShiftInternal(true, Keyboard.SHIFT_OFF);
+            return;
+        }
         handleShiftInternal(false, -1);
     }
 
@@ -2485,6 +2495,7 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
+        mShiftSelecting = false; // Any character input exits selection mode
         // When Ctrl/Alt/Meta is active with Korean jamo, map to QWERTY for shortcuts
         if (HangulComposer.isHangulJamo(primaryCode) && (mModCtrl || mModAlt || mModMeta)) {
             int qwerty = jamoToQwerty(primaryCode);
