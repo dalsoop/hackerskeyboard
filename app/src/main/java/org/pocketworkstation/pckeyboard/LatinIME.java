@@ -2832,6 +2832,8 @@ public class LatinIME extends InputMethodService implements
 
         // Check if we have a suggestion engine attached.
         if ((mSuggest == null || !isPredictionOn())) {
+            // No predictions — show action toolbar instead
+            updateActionToolbarVisibility(false);
             return;
         }
         
