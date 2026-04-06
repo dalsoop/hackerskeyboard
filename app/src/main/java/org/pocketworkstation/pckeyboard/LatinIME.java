@@ -2705,8 +2705,9 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleSeparator(int primaryCode) {
+        boolean hadHangul = mHangulComposer.isComposing();
         // Commit any pending Hangul composition before separator
-        if (mHangulComposer.isComposing()) {
+        if (hadHangul) {
             commitHangulComposing();
         }
 
@@ -2722,7 +2723,9 @@ public class LatinIME extends InputMethodService implements
         InputConnection ic = getCurrentInputConnection();
         if (ic != null) {
             ic.beginBatchEdit();
-            abortCorrection(false);
+            // Skip abortCorrection if we just committed Hangul,
+            // it would call finishComposingText again causing doubling
+            if (!hadHangul) abortCorrection(false);
         }
         if (mPredicting) {
             // In certain languages where single quote is a separator, it's
