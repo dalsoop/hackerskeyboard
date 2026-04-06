@@ -183,7 +183,6 @@ public class LatinIME extends InputMethodService implements
     private int mCommittedLength;
     private boolean mPredicting;
     private HangulComposer mHangulComposer = new HangulComposer();
-    private boolean mShiftSelecting = false; // Shift+Arrow text selection mode
     private boolean mEnableVoiceButton;
     private CharSequence mBestWord;
     private boolean mPredictionOnForMode;
@@ -1714,15 +1713,19 @@ public class LatinIME extends InputMethodService implements
 
     private void sendSpecialKey(int code) {
         if (!isConnectbot()) {
-            boolean shifted = isShiftMod() || mShiftSelecting;
             commitTyped(getCurrentInputConnection(), true);
-            if (shifted && isNavigationKey(code)) {
-                // Shift+NavKey: send with shift, keep selection mode
-                sendModifiedKeyDownUp(code, true);
-                mShiftSelecting = true;
-                handleShiftInternal(true, Keyboard.SHIFT_ON);
+            if (isNavigationKey(code)) {
+                // Navigation keys: read current shift/ctrl/alt state into meta flags
+                // but do NOT reset shift state. Shift is only changed by Shift key itself.
+                // This matches physical keyboard behavior.
+                InputConnection ic = getCurrentInputConnection();
+                int meta = getMetaState(isShiftMod());
+                sendKeyDown(ic, code, meta);
+                sendKeyUp(ic, code, meta);
+                // Only clean up Ctrl/Alt (not Shift) after navigation
+                if (mModCtrl && !mCtrlKeyState.isChording()) setModCtrl(false);
+                if (mModAlt && !mAltKeyState.isChording()) setModAlt(false);
             } else {
-                mShiftSelecting = false;
                 sendModifiedKeyDownUp(code);
             }
             return;
@@ -2394,12 +2397,6 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleShift() {
-        if (mShiftSelecting) {
-            // Exit selection mode: turn off shift
-            mShiftSelecting = false;
-            handleShiftInternal(true, Keyboard.SHIFT_OFF);
-            return;
-        }
         handleShiftInternal(false, -1);
     }
 
@@ -2495,7 +2492,6 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
-        mShiftSelecting = false; // Any character input exits selection mode
         // When Ctrl/Alt/Meta is active with Korean jamo, map to QWERTY for shortcuts
         if (HangulComposer.isHangulJamo(primaryCode) && (mModCtrl || mModAlt || mModMeta)) {
             int qwerty = jamoToQwerty(primaryCode);
