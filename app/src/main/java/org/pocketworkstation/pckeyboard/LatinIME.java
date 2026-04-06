@@ -2383,8 +2383,51 @@ public class LatinIME extends InputMethodService implements
         }
     }
 
+    // Map Korean jamo to QWERTY key positions for Ctrl shortcuts
+    private static int jamoToQwerty(int jamo) {
+        switch (jamo) {
+            case 0x3142: return 'q';  // ㅂ
+            case 0x3148: return 'w';  // ㅈ
+            case 0x3137: return 'e';  // ㄷ
+            case 0x3131: return 'r';  // ㄱ
+            case 0x3145: return 't';  // ㅅ
+            case 0x315B: return 'y';  // ㅛ
+            case 0x3155: return 'u';  // ㅕ
+            case 0x3151: return 'i';  // ㅑ
+            case 0x3150: return 'o';  // ㅐ
+            case 0x3154: return 'p';  // ㅔ
+            case 0x3141: return 'a';  // ㅁ
+            case 0x3134: return 's';  // ㄴ
+            case 0x3147: return 'd';  // ㅇ
+            case 0x3139: return 'f';  // ㄹ
+            case 0x314E: return 'g';  // ㅎ
+            case 0x3157: return 'h';  // ㅗ
+            case 0x3153: return 'j';  // ㅓ
+            case 0x314F: return 'k';  // ㅏ
+            case 0x3163: return 'l';  // ㅣ
+            case 0x314B: return 'z';  // ㅋ
+            case 0x314C: return 'x';  // ㅌ
+            case 0x314A: return 'c';  // ㅊ
+            case 0x314D: return 'v';  // ㅍ
+            case 0x3160: return 'b';  // ㅠ
+            case 0x315C: return 'n';  // ㅜ
+            case 0x3161: return 'm';  // ㅡ
+            default: return 0;
+        }
+    }
+
     private void handleCharacter(int primaryCode, int[] keyCodes) {
-        // Hangul composition: intercept jamo input
+        // When Ctrl/Alt/Meta is active with Korean jamo, map to QWERTY for shortcuts
+        if (HangulComposer.isHangulJamo(primaryCode) && (mModCtrl || mModAlt || mModMeta)) {
+            int qwerty = jamoToQwerty(primaryCode);
+            if (qwerty != 0) {
+                if (mHangulComposer.isComposing()) commitHangulComposing();
+                primaryCode = qwerty;
+                // Fall through to normal modifier handling below
+            }
+        }
+
+        // Hangul composition: intercept jamo input (only when no modifier active)
         if (HangulComposer.isHangulJamo(primaryCode)) {
             // If prediction was active (from English mode), commit it first
             if (mPredicting) {
