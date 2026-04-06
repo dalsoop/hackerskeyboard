@@ -2383,19 +2383,21 @@ public class LatinIME extends InputMethodService implements
         }
     }
 
-    // Map Korean jamo to QWERTY key positions for Ctrl shortcuts
+    // Map Korean jamo (including shifted/tense) to QWERTY key positions for shortcuts
     private static int jamoToQwerty(int jamo) {
         switch (jamo) {
-            case 0x3142: return 'q';  // ㅂ
-            case 0x3148: return 'w';  // ㅈ
-            case 0x3137: return 'e';  // ㄷ
-            case 0x3131: return 'r';  // ㄱ
-            case 0x3145: return 't';  // ㅅ
+            // Row 1: QWERTYUIOP
+            case 0x3142: case 0x3143: return 'q';  // ㅂ/ㅃ
+            case 0x3148: case 0x3149: return 'w';  // ㅈ/ㅉ
+            case 0x3137: case 0x3138: return 'e';  // ㄷ/ㄸ
+            case 0x3131: case 0x3132: return 'r';  // ㄱ/ㄲ
+            case 0x3145: case 0x3146: return 't';  // ㅅ/ㅆ
             case 0x315B: return 'y';  // ㅛ
             case 0x3155: return 'u';  // ㅕ
             case 0x3151: return 'i';  // ㅑ
-            case 0x3150: return 'o';  // ㅐ
-            case 0x3154: return 'p';  // ㅔ
+            case 0x3150: case 0x3152: return 'o';  // ㅐ/ㅒ
+            case 0x3154: case 0x3156: return 'p';  // ㅔ/ㅖ
+            // Row 2: ASDFGHJKL
             case 0x3141: return 'a';  // ㅁ
             case 0x3134: return 's';  // ㄴ
             case 0x3147: return 'd';  // ㅇ
@@ -2405,6 +2407,7 @@ public class LatinIME extends InputMethodService implements
             case 0x3153: return 'j';  // ㅓ
             case 0x314F: return 'k';  // ㅏ
             case 0x3163: return 'l';  // ㅣ
+            // Row 3: ZXCVBNM
             case 0x314B: return 'z';  // ㅋ
             case 0x314C: return 'x';  // ㅌ
             case 0x314A: return 'c';  // ㅊ
@@ -2412,6 +2415,14 @@ public class LatinIME extends InputMethodService implements
             case 0x3160: return 'b';  // ㅠ
             case 0x315C: return 'n';  // ㅜ
             case 0x3161: return 'm';  // ㅡ
+            // Compound vowels (popup/longpress)
+            case 0x3158: return 'h';  // ㅘ → ㅗ position
+            case 0x3159: return 'h';  // ㅙ → ㅗ position
+            case 0x315A: return 'h';  // ㅚ → ㅗ position
+            case 0x315D: return 'n';  // ㅝ → ㅜ position
+            case 0x315E: return 'n';  // ㅞ → ㅜ position
+            case 0x315F: return 'n';  // ㅟ → ㅜ position
+            case 0x3162: return 'm';  // ㅢ → ㅡ position
             default: return 0;
         }
     }
