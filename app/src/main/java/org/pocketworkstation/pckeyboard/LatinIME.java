@@ -1567,11 +1567,23 @@ public class LatinIME extends InputMethodService implements
 
     private void sendModifiedKeyDownUp(int key, boolean shifted) {
         InputConnection ic = getCurrentInputConnection();
+        // When modifier is held (chording), include it in meta but don't send
+        // separate modifier key-up events, so repeated keys keep the modifier.
+        boolean chordingShift = shifted && mShiftKeyState.isChording();
+        boolean chordingCtrl = mModCtrl && mCtrlKeyState.isChording();
+        boolean chordingAlt = mModAlt && mAltKeyState.isChording();
         int meta = getMetaState(shifted);
-        sendModifierKeysDown(shifted);
-        sendKeyDown(ic, key, meta);
-        sendKeyUp(ic, key, meta);
-        sendModifierKeysUp(shifted);
+        if (!chordingShift && !chordingCtrl && !chordingAlt) {
+            // No chording: normal flow with modifier key events
+            sendModifierKeysDown(shifted);
+            sendKeyDown(ic, key, meta);
+            sendKeyUp(ic, key, meta);
+            sendModifierKeysUp(shifted);
+        } else {
+            // Chording: just send the key with meta flags, no separate modifier events
+            sendKeyDown(ic, key, meta);
+            sendKeyUp(ic, key, meta);
+        }
     }
 
     private boolean isShiftMod() {
@@ -1667,33 +1679,23 @@ public class LatinIME extends InputMethodService implements
 
     private void handleModifierKeysUp(boolean shifted, boolean sendKey) {
         InputConnection ic = getCurrentInputConnection();
-        if (mModMeta) {
-            boolean keepMeta = mMetaKeyState.isChording();
-            if (!keepMeta || delayChordingMetaModifier()) {
-                if (sendKey && !keepMeta) sendMetaKey(ic, false, false);
-                if (!keepMeta) setModMeta(false);
-            }
+        if (mModMeta && (!mMetaKeyState.isChording() || delayChordingMetaModifier())) {
+            if (sendKey) sendMetaKey(ic, false, false);
+            if (!mMetaKeyState.isChording()) setModMeta(false);
         }
-        if (mModAlt) {
-            boolean keepAlt = mAltKeyState.isChording();
-            if (!keepAlt || delayChordingAltModifier()) {
-                if (sendKey && !keepAlt) sendAltKey(ic, false, false);
-                if (!keepAlt) setModAlt(false);
-            }
+        if (mModAlt && (!mAltKeyState.isChording() || delayChordingAltModifier())) {
+            if (sendKey) sendAltKey(ic, false, false);
+            if (!mAltKeyState.isChording()) setModAlt(false);
         }
-        if (mModCtrl) {
-            boolean keepCtrl = mCtrlKeyState.isChording();
-            if (!keepCtrl || delayChordingCtrlModifier()) {
-                if (sendKey && !keepCtrl) sendCtrlKey(ic, false, false);
-                if (!keepCtrl) setModCtrl(false);
-            }
+        if (mModCtrl && (!mCtrlKeyState.isChording()  || delayChordingCtrlModifier())) {
+            if (sendKey) sendCtrlKey(ic, false, false);
+            if (!mCtrlKeyState.isChording()) setModCtrl(false);
         }
         if (shifted) {
             //Log.i(TAG, "send SHIFT up");
+            if (sendKey) sendShiftKey(ic, false);
             int shiftState = getShiftState();
-            boolean keepShift = mShiftKeyState.isChording() || shiftState == Keyboard.SHIFT_LOCKED;
-            if (sendKey && !keepShift) sendShiftKey(ic, false);
-            if (!keepShift) {
+            if (!(mShiftKeyState.isChording() || shiftState == Keyboard.SHIFT_LOCKED)) {
                 resetShift();
             }
         }
