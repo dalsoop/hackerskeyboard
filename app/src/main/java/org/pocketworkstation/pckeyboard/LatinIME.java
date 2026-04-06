@@ -2320,6 +2320,10 @@ public class LatinIME extends InputMethodService implements
         // Log.i("LatinIME", "setModCtrl "+ mModCtrl + "->" + val + ", chording=" + mCtrlKeyState.isChording());
         mKeyboardSwitcher.setCtrlIndicator(val);
         mModCtrl = val;
+        sKeyboardSettings.ctrlActive = val;
+        // Redraw keyboard to show/hide Ctrl shortcut labels
+        LatinKeyboardView view = mKeyboardSwitcher.getInputView();
+        if (view != null) view.invalidateAllKeys();
     }
 
     private void setModAlt(boolean val) {

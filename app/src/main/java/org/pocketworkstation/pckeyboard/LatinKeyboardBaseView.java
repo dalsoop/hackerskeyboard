@@ -893,6 +893,39 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         canvas.drawText(accent, x, baseline, paint);
     }
 
+    private static String getCtrlShortcutLabel(char ch) {
+        switch (Character.toLowerCase(ch)) {
+            case 'c': return "Copy";
+            case 'v': return "Paste";
+            case 'x': return "Cut";
+            case 'a': return "All";
+            case 'z': return "Undo";
+            case 'y': return "Redo";
+            case 's': return "Save";
+            case 'f': return "Find";
+            case 'n': return "New";
+            case 'o': return "Open";
+            case 'w': return "Close";
+            case 'p': return "Print";
+            case 'b': return "Bold";
+            case 'i': return "Italic";
+            case 'u': return "Uline";
+            case 'r': return "Rplc";
+            case 'h': return "Hist";
+            case 'l': return "Line";
+            case 'd': return "Del";
+            case 'e': return "Exp";
+            case 't': return "Tab";
+            // Korean jamo → show QWERTY shortcut
+            case '\u314A': return "Copy";   // ㅊ → C
+            case '\u314D': return "Paste";  // ㅍ → V
+            case '\u314C': return "Cut";    // ㅌ → X
+            case '\u3141': return "All";    // ㅁ → A
+            case '\u314B': return "Undo";   // ㅋ → Z
+            default: return null;
+        }
+    }
+
     private int getLabelHeight(Paint paint, int labelSize) {
         Integer labelHeightValue = mTextHeightCache.get(labelSize);
         if (labelHeightValue != null) {
@@ -1002,6 +1035,11 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
 
             // Switch the character to uppercase if shift is pressed
             String label = key.getCaseLabel();
+            // Show Ctrl shortcut labels when Ctrl is active
+            if (label != null && label.length() == 1 && LatinIME.sKeyboardSettings.ctrlActive) {
+                String ctrlLabel = getCtrlShortcutLabel(label.charAt(0));
+                if (ctrlLabel != null) label = ctrlLabel;
+            }
 
             float yscale = 1.0f;
             final Rect bounds = keyBackground.getBounds();
