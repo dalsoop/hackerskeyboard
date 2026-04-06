@@ -1667,23 +1667,33 @@ public class LatinIME extends InputMethodService implements
 
     private void handleModifierKeysUp(boolean shifted, boolean sendKey) {
         InputConnection ic = getCurrentInputConnection();
-        if (mModMeta && (!mMetaKeyState.isChording() || delayChordingMetaModifier())) {
-            if (sendKey) sendMetaKey(ic, false, false);
-            if (!mMetaKeyState.isChording()) setModMeta(false);
+        if (mModMeta) {
+            boolean keepMeta = mMetaKeyState.isChording();
+            if (!keepMeta || delayChordingMetaModifier()) {
+                if (sendKey && !keepMeta) sendMetaKey(ic, false, false);
+                if (!keepMeta) setModMeta(false);
+            }
         }
-        if (mModAlt && (!mAltKeyState.isChording() || delayChordingAltModifier())) {
-            if (sendKey) sendAltKey(ic, false, false);
-            if (!mAltKeyState.isChording()) setModAlt(false);
+        if (mModAlt) {
+            boolean keepAlt = mAltKeyState.isChording();
+            if (!keepAlt || delayChordingAltModifier()) {
+                if (sendKey && !keepAlt) sendAltKey(ic, false, false);
+                if (!keepAlt) setModAlt(false);
+            }
         }
-        if (mModCtrl && (!mCtrlKeyState.isChording()  || delayChordingCtrlModifier())) {
-            if (sendKey) sendCtrlKey(ic, false, false);
-            if (!mCtrlKeyState.isChording()) setModCtrl(false);
+        if (mModCtrl) {
+            boolean keepCtrl = mCtrlKeyState.isChording();
+            if (!keepCtrl || delayChordingCtrlModifier()) {
+                if (sendKey && !keepCtrl) sendCtrlKey(ic, false, false);
+                if (!keepCtrl) setModCtrl(false);
+            }
         }
         if (shifted) {
             //Log.i(TAG, "send SHIFT up");
-            if (sendKey) sendShiftKey(ic, false);
             int shiftState = getShiftState();
-            if (!(mShiftKeyState.isChording() || shiftState == Keyboard.SHIFT_LOCKED)) {
+            boolean keepShift = mShiftKeyState.isChording() || shiftState == Keyboard.SHIFT_LOCKED;
+            if (sendKey && !keepShift) sendShiftKey(ic, false);
+            if (!keepShift) {
                 resetShift();
             }
         }
