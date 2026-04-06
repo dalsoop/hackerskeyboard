@@ -1566,6 +1566,10 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void sendModifiedKeyDownUp(int key, boolean shifted) {
+        sendModifiedKeyDownUp(key, shifted, false);
+    }
+
+    private void sendModifiedKeyDownUp(int key, boolean shifted, boolean keepShift) {
         InputConnection ic = getCurrentInputConnection();
         // When modifier is held (chording), include it in meta but don't send
         // separate modifier key-up events, so repeated keys keep the modifier.
@@ -1578,7 +1582,12 @@ public class LatinIME extends InputMethodService implements
             sendModifierKeysDown(shifted);
             sendKeyDown(ic, key, meta);
             sendKeyUp(ic, key, meta);
-            sendModifierKeysUp(shifted);
+            if (keepShift) {
+                // For navigation keys: don't reset shift so repeated keys keep selecting
+                handleModifierKeysUp(false, true); // only release non-shift modifiers
+            } else {
+                sendModifierKeysUp(shifted);
+            }
         } else {
             // Chording: just send the key with meta flags, no separate modifier events
             sendKeyDown(ic, key, meta);
@@ -1705,10 +1714,19 @@ public class LatinIME extends InputMethodService implements
         handleModifierKeysUp(shifted, true);
     }
 
+    private static boolean isNavigationKey(int code) {
+        return code == KeyEvent.KEYCODE_DPAD_LEFT || code == KeyEvent.KEYCODE_DPAD_RIGHT
+            || code == KeyEvent.KEYCODE_DPAD_UP || code == KeyEvent.KEYCODE_DPAD_DOWN
+            || code == KeyEvent.KEYCODE_MOVE_HOME || code == KeyEvent.KEYCODE_MOVE_END;
+    }
+
     private void sendSpecialKey(int code) {
         if (!isConnectbot()) {
             commitTyped(getCurrentInputConnection(), true);
-            sendModifiedKeyDownUp(code);
+            // Keep shift active for navigation keys so Shift+Arrow repeated taps
+            // continue selecting text without resetting shift
+            boolean keepShift = isShiftMod() && isNavigationKey(code);
+            sendModifiedKeyDownUp(code, isShiftMod(), keepShift);
             return;
         }
 
