@@ -1566,10 +1566,6 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void sendModifiedKeyDownUp(int key, boolean shifted) {
-        sendModifiedKeyDownUp(key, shifted, false);
-    }
-
-    private void sendModifiedKeyDownUp(int key, boolean shifted, boolean keepShift) {
         InputConnection ic = getCurrentInputConnection();
         // When modifier is held (chording), include it in meta but don't send
         // separate modifier key-up events, so repeated keys keep the modifier.
@@ -1582,12 +1578,7 @@ public class LatinIME extends InputMethodService implements
             sendModifierKeysDown(shifted);
             sendKeyDown(ic, key, meta);
             sendKeyUp(ic, key, meta);
-            if (keepShift) {
-                // For navigation keys: don't reset shift so repeated keys keep selecting
-                handleModifierKeysUp(false, true); // only release non-shift modifiers
-            } else {
-                sendModifierKeysUp(shifted);
-            }
+            sendModifierKeysUp(shifted);
         } else {
             // Chording: just send the key with meta flags, no separate modifier events
             sendKeyDown(ic, key, meta);
@@ -1722,11 +1713,14 @@ public class LatinIME extends InputMethodService implements
 
     private void sendSpecialKey(int code) {
         if (!isConnectbot()) {
+            boolean wasShifted = isShiftMod();
             commitTyped(getCurrentInputConnection(), true);
-            // Keep shift active for navigation keys so Shift+Arrow repeated taps
-            // continue selecting text without resetting shift
-            boolean keepShift = isShiftMod() && isNavigationKey(code);
-            sendModifiedKeyDownUp(code, isShiftMod(), keepShift);
+            sendModifiedKeyDownUp(code);
+            // Re-activate shift after navigation keys so repeated taps keep selecting.
+            // Non-navigation keys (characters etc.) won't re-activate, so shift resets.
+            if (wasShifted && isNavigationKey(code)) {
+                handleShiftInternal(true, Keyboard.SHIFT_ON);
+            }
             return;
         }
 
