@@ -2563,9 +2563,9 @@ public class LatinIME extends InputMethodService implements
         if (ic == null) return;
         mHangulComposer.commit();
         mHangulComposing.setLength(0);
-        // finishComposingText commits the current composing text as-is.
-        // Do NOT also call commitText, or the character will be doubled.
+        ic.beginBatchEdit();
         ic.finishComposingText();
+        ic.endBatchEdit();
     }
 
     private void setupActionToolbar() {
