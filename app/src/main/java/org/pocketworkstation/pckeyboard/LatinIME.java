@@ -183,7 +183,6 @@ public class LatinIME extends InputMethodService implements
     private int mCommittedLength;
     private boolean mPredicting;
     private HangulComposer mHangulComposer = new HangulComposer();
-    private boolean mUserShiftOn = false; // true when user explicitly tapped Shift
     private boolean mEnableVoiceButton;
     private CharSequence mBestWord;
     private boolean mPredictionOnForMode;
@@ -1716,11 +1715,10 @@ public class LatinIME extends InputMethodService implements
         if (!isConnectbot()) {
             commitTyped(getCurrentInputConnection(), true);
             if (isNavigationKey(code)) {
-                // Navigation keys use mUserShiftOn (explicit Shift tap) or chording
-                // to determine shift. Does NOT use keyboard's internal shift state
-                // which can be reset by updateShiftKeyState after cursor movement.
-                boolean shifted = mUserShiftOn || mShiftKeyState.isChording();
+                // Navigation keys: read current shift state into meta flags
+                // but do NOT reset shift state afterward.
                 InputConnection ic = getCurrentInputConnection();
+                boolean shifted = isShiftMod();
                 int meta = getMetaState(shifted);
                 sendKeyDown(ic, code, meta);
                 sendKeyUp(ic, code, meta);
@@ -2399,8 +2397,6 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleShift() {
-        // Toggle mUserShiftOn: ON→OFF, OFF→ON
-        mUserShiftOn = !mUserShiftOn;
         handleShiftInternal(false, -1);
     }
 
@@ -2496,7 +2492,6 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {
-        mUserShiftOn = false; // Character input clears explicit shift
         // When Ctrl/Alt/Meta is active with Korean jamo, map to QWERTY for shortcuts
         if (HangulComposer.isHangulJamo(primaryCode) && (mModCtrl || mModAlt || mModMeta)) {
             int qwerty = jamoToQwerty(primaryCode);
@@ -2757,7 +2752,6 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void handleSeparator(int primaryCode) {
-        mUserShiftOn = false; // Separator clears explicit shift
         boolean hadHangul = mHangulComposer.isComposing();
         // Commit any pending Hangul composition before separator
         if (hadHangul) {
@@ -3567,7 +3561,6 @@ public class LatinIME extends InputMethodService implements
         final boolean distinctMultiTouch = mKeyboardSwitcher
                 .hasDistinctMultitouch();
         if (distinctMultiTouch && primaryCode == Keyboard.KEYCODE_SHIFT) {
-            mUserShiftOn = true;
             mShiftKeyState.onPress();
             startMultitouchShift();
         } else if (distinctMultiTouch
@@ -3614,7 +3607,6 @@ public class LatinIME extends InputMethodService implements
         InputConnection ic = getCurrentInputConnection();
         if (distinctMultiTouch && primaryCode == Keyboard.KEYCODE_SHIFT) {
             if (mShiftKeyState.isChording()) {
-                mUserShiftOn = false; // Released after chording
                 resetMultitouchShift();
             } else {
                 commitMultitouchShift();
