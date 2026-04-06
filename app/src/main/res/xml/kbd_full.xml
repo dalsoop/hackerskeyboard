@@ -212,10 +212,9 @@
     </Row>
     <Row>
         <Key
-            hackkbd:keyLabel="Ctrl"
+            hackkbd:keyLabel="@string/action_clipboard"
             hackkbd:keyWidth="10.7142855%p"
-            hackkbd:codes="@integer/key_ctrl_left"
-            hackkbd:isSticky="true"
+            hackkbd:codes="@integer/key_clipboard"
             hackkbd:keyEdgeFlags="left"
             hackkbd:isModifier="true" />
         <Key

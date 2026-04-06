@@ -212,10 +212,9 @@
     </Row>
     <Row>
         <Key
-            android:keyLabel="Ctrl"
+            android:keyLabel="@string/action_clipboard"
             android:keyWidth="10.7142855%p"
-            android:codes="@integer/key_ctrl_left"
-            android:isSticky="true"
+            android:codes="@integer/key_clipboard"
             android:keyEdgeFlags="left"
             android:isModifier="true" />
         <Key

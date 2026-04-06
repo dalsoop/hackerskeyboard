@@ -65,4 +65,5 @@
     <integer name="key_num_lock">-143</integer>
     <integer name="key_next_language">-104</integer>
     <integer name="key_ime_picker">-200</integer>
+    <integer name="key_clipboard">-201</integer>
 </resources>
