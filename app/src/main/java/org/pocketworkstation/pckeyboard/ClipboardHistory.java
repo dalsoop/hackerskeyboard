@@ -22,19 +22,22 @@ public class ClipboardHistory {
                 @Override
                 public void onPrimaryClipChanged() {
                     if (mClipboardManager == null) return;
-                    ClipData clip = mClipboardManager.getPrimaryClip();
-                    if (clip == null || clip.getItemCount() == 0) return;
-                    CharSequence text = clip.getItemAt(0).getText();
-                    if (text == null || text.length() == 0) return;
-                    String str = text.toString().trim();
-                    if (str.isEmpty()) return;
-                    // Remove duplicate if exists
-                    mHistory.remove(str);
-                    // Add to front
-                    mHistory.add(0, str);
-                    // Trim to max
-                    while (mHistory.size() > MAX_ITEMS) {
-                        mHistory.remove(mHistory.size() - 1);
+                    try {
+                        ClipData clip = mClipboardManager.getPrimaryClip();
+                        if (clip == null || clip.getItemCount() == 0) return;
+                        CharSequence text = clip.getItemAt(0).getText();
+                        if (text == null || text.length() == 0) return;
+                        String str = text.toString().trim();
+                        if (str.isEmpty()) return;
+                        synchronized (mHistory) {
+                            mHistory.remove(str);
+                            mHistory.add(0, str);
+                            while (mHistory.size() > MAX_ITEMS) {
+                                mHistory.remove(mHistory.size() - 1);
+                            }
+                        }
+                    } catch (Exception e) {
+                        // Ignore clipboard access errors
                     }
                 }
             };
@@ -58,7 +61,9 @@ public class ClipboardHistory {
     }
 
     public List<String> getItems() {
-        return mHistory;
+        synchronized (mHistory) {
+            return new ArrayList<>(mHistory);
+        }
     }
 
     public String getCurrentClip() {
@@ -70,10 +75,14 @@ public class ClipboardHistory {
     }
 
     public boolean hasItems() {
-        return !mHistory.isEmpty();
+        synchronized (mHistory) {
+            return !mHistory.isEmpty();
+        }
     }
 
     public void clear() {
-        mHistory.clear();
+        synchronized (mHistory) {
+            mHistory.clear();
+        }
     }
 }

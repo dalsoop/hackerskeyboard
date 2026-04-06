@@ -2594,12 +2594,12 @@ public class LatinIME extends InputMethodService implements
                 }
             }
         };
-        mActionToolbar.findViewById(R.id.action_select_all).setOnClickListener(listener);
-        mActionToolbar.findViewById(R.id.action_cut).setOnClickListener(listener);
-        mActionToolbar.findViewById(R.id.action_copy).setOnClickListener(listener);
-        mActionToolbar.findViewById(R.id.action_paste).setOnClickListener(listener);
-        mActionToolbar.findViewById(R.id.action_clipboard).setOnClickListener(listener);
-        mActionToolbar.findViewById(R.id.action_emoji).setOnClickListener(listener);
+        int[] ids = {R.id.action_select_all, R.id.action_cut, R.id.action_copy,
+                     R.id.action_paste, R.id.action_clipboard, R.id.action_emoji};
+        for (int id : ids) {
+            View btn = mActionToolbar.findViewById(id);
+            if (btn != null) btn.setOnClickListener(listener);
+        }
     }
 
     private void showClipboardPopup(View anchor) {
