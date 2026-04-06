@@ -183,6 +183,7 @@ public class LatinIME extends InputMethodService implements
     private int mCommittedLength;
     private boolean mPredicting;
     private HangulComposer mHangulComposer = new HangulComposer();
+    private boolean mSkipShiftUpdate = false; // Skip one updateShiftKeyState after nav key
     private boolean mEnableVoiceButton;
     private CharSequence mBestWord;
     private boolean mPredictionOnForMode;
@@ -1346,6 +1347,11 @@ public class LatinIME extends InputMethodService implements
     }
 
     public void updateShiftKeyState(EditorInfo attr) {
+        // After navigation keys with Shift, skip one update to preserve selection
+        if (mSkipShiftUpdate) {
+            mSkipShiftUpdate = false;
+            return;
+        }
         InputConnection ic = getCurrentInputConnection();
         if (ic != null && attr != null && mKeyboardSwitcher.isAlphabetMode()) {
             int oldState = getShiftState();
@@ -1722,7 +1728,9 @@ public class LatinIME extends InputMethodService implements
                 int meta = getMetaState(shifted);
                 sendKeyDown(ic, code, meta);
                 sendKeyUp(ic, code, meta);
-                // Clean up Ctrl/Alt after navigation (not Shift)
+                // Skip next updateShiftKeyState so cursor movement doesn't reset Shift
+                if (shifted) mSkipShiftUpdate = true;
+                // Clean up Ctrl/Alt (not Shift)
                 if (mModCtrl && !mCtrlKeyState.isChording()) setModCtrl(false);
                 if (mModAlt && !mAltKeyState.isChording()) setModAlt(false);
             } else {
