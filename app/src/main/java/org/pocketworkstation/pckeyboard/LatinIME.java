@@ -2394,7 +2394,8 @@ public class LatinIME extends InputMethodService implements
 
     private void abortCorrection(boolean force) {
         if (force || TextEntryState.isCorrecting()) {
-            getCurrentInputConnection().finishComposingText();
+            InputConnection ic = getCurrentInputConnection();
+            if (ic != null) ic.finishComposingText();
             clearSuggestions();
         }
     }
@@ -2603,32 +2604,43 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void showClipboardPopup(View anchor) {
-        java.util.List<String> items = mClipboardHistory.getItems();
+        final java.util.List<String> items = mClipboardHistory.getItems();
         if (items.isEmpty()) {
             Toast.makeText(this, "클립보드가 비어있습니다", Toast.LENGTH_SHORT).show();
             return;
         }
-        android.widget.PopupMenu popup = new android.widget.PopupMenu(this, anchor);
+        String[] labels = new String[items.size()];
         for (int i = 0; i < items.size(); i++) {
             String item = items.get(i);
-            String label = item.length() > 40 ? item.substring(0, 40) + "..." : item;
-            popup.getMenu().add(0, i, i, label);
+            labels[i] = item.length() > 50 ? item.substring(0, 50) + "..." : item;
         }
-        popup.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog);
+        builder.setTitle("클립보드");
+        builder.setItems(labels, new DialogInterface.OnClickListener() {
             @Override
-            public boolean onMenuItemClick(android.view.MenuItem menuItem) {
-                int idx = menuItem.getItemId();
-                if (idx >= 0 && idx < mClipboardHistory.getItems().size()) {
+            public void onClick(DialogInterface dialog, int which) {
+                if (which >= 0 && which < items.size()) {
                     InputConnection ic = getCurrentInputConnection();
                     if (ic != null) {
                         if (mHangulComposer.isComposing()) commitHangulComposing();
-                        ic.commitText(mClipboardHistory.getItems().get(idx), 1);
+                        ic.commitText(items.get(which), 1);
                     }
                 }
-                return true;
             }
         });
-        popup.show();
+        AlertDialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG);
+            IBinder token = mKeyboardSwitcher.getInputView() != null
+                    ? mKeyboardSwitcher.getInputView().getWindowToken() : null;
+            if (token != null) {
+                WindowManager.LayoutParams lp = window.getAttributes();
+                lp.token = token;
+                window.setAttributes(lp);
+            }
+        }
+        dialog.show();
     }
 
     private static final String[] EMOJI_LIST = {
@@ -2641,25 +2653,33 @@ public class LatinIME extends InputMethodService implements
     };
 
     private void showEmojiPopup(View anchor) {
-        android.widget.PopupMenu popup = new android.widget.PopupMenu(this, anchor);
-        for (int i = 0; i < EMOJI_LIST.length; i++) {
-            popup.getMenu().add(0, i, i, EMOJI_LIST[i]);
-        }
-        popup.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog);
+        builder.setTitle("이모지");
+        builder.setItems(EMOJI_LIST, new DialogInterface.OnClickListener() {
             @Override
-            public boolean onMenuItemClick(android.view.MenuItem menuItem) {
-                int idx = menuItem.getItemId();
-                if (idx >= 0 && idx < EMOJI_LIST.length) {
+            public void onClick(DialogInterface dialog, int which) {
+                if (which >= 0 && which < EMOJI_LIST.length) {
                     InputConnection ic = getCurrentInputConnection();
                     if (ic != null) {
                         if (mHangulComposer.isComposing()) commitHangulComposing();
-                        ic.commitText(EMOJI_LIST[idx], 1);
+                        ic.commitText(EMOJI_LIST[which], 1);
                     }
                 }
-                return true;
             }
         });
-        popup.show();
+        AlertDialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG);
+            IBinder token = mKeyboardSwitcher.getInputView() != null
+                    ? mKeyboardSwitcher.getInputView().getWindowToken() : null;
+            if (token != null) {
+                WindowManager.LayoutParams lp = window.getAttributes();
+                lp.token = token;
+                window.setAttributes(lp);
+            }
+        }
+        dialog.show();
     }
 
     private void updateActionToolbarVisibility(boolean hasSuggestions) {
