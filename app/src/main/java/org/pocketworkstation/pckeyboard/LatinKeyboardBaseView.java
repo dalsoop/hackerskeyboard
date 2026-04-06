@@ -917,24 +917,24 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
             case 'e': return "Exp";
             case 't': return "Tab";
             // Korean jamo → QWERTY position → Ctrl shortcut
-            case '\u3142': case '\u3143': return null;   // ㅂ/ㅃ → Q (no common shortcut)
-            case '\u3148': case '\u3149': return "Close"; // ㅈ/ㅉ → W
-            case '\u3137': case '\u3138': return "Exp";   // ㄷ/ㄸ → E
-            case '\u3131': case '\u3132': return "Rplc";  // ㄱ/ㄲ → R
-            case '\u3145': case '\u3146': return "Tab";   // ㅅ/ㅆ → T
+            case '\u3142': case '\u3143': return "[Q]";    // ㅂ/ㅃ → Q
+            case '\u3148': case '\u3149': return "Close";  // ㅈ/ㅉ → W
+            case '\u3137': case '\u3138': return "Exp";    // ㄷ/ㄸ → E
+            case '\u3131': case '\u3132': return "Rplc";   // ㄱ/ㄲ → R
+            case '\u3145': case '\u3146': return "Tab";    // ㅅ/ㅆ → T
             case '\u315B': return "Redo";  // ㅛ → Y
             case '\u3155': return "Uline"; // ㅕ → U
             case '\u3151': return "Italic";// ㅑ → I
-            case '\u3150': case '\u3152': return "Open";  // ㅐ/ㅒ → O
-            case '\u3154': case '\u3156': return "Print"; // ㅔ/ㅖ → P
+            case '\u3150': case '\u3152': return "Open";   // ㅐ/ㅒ → O
+            case '\u3154': case '\u3156': return "Print";  // ㅔ/ㅖ → P
             case '\u3141': return "All";   // ㅁ → A
             case '\u3134': return "Save";  // ㄴ → S
             case '\u3147': return "Del";   // ㅇ → D
             case '\u3139': return "Find";  // ㄹ → F
-            case '\u314E': return "Hist";  // ㅎ → G
-            case '\u3157': return null;    // ㅗ → H
-            case '\u3153': return null;    // ㅓ → J
-            case '\u314F': return null;    // ㅏ → K
+            case '\u314E': return "[G]";   // ㅎ → G
+            case '\u3157': return "[H]";   // ㅗ → H
+            case '\u3153': return "[J]";   // ㅓ → J
+            case '\u314F': return "[K]";   // ㅏ → K
             case '\u3163': return "Line";  // ㅣ → L
             case '\u314B': return "Undo";  // ㅋ → Z
             case '\u314C': return "Cut";   // ㅌ → X
@@ -942,7 +942,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
             case '\u314D': return "Paste"; // ㅍ → V
             case '\u3160': return "Bold";  // ㅠ → B
             case '\u315C': return "New";   // ㅜ → N
-            case '\u3161': return null;    // ㅡ → M
+            case '\u3161': return "[M]";   // ㅡ → M
             default: return null;
         }
     }
