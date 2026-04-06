@@ -55,12 +55,17 @@
         hackkbd:keyWidth="6.75%p"
     >
         <Key
+            hackkbd:keyLabel="Esc"
+            hackkbd:codes="@integer/key_escape"
+            hackkbd:keyWidth="4%p"
+            hackkbd:keyEdgeFlags="left"
+            hackkbd:isModifier="true" />
+        <Key
             hackkbd:keyLabel="@string/key_tlde_main"
             hackkbd:shiftLabel="@string/key_tlde_shift"
             hackkbd:popupKeyboard="@xml/kbd_popup_template"
             hackkbd:popupCharacters="@string/key_tlde_alt"
-            hackkbd:keyWidth="7.5%p"
-            hackkbd:keyEdgeFlags="left" />
+            hackkbd:keyWidth="6.75%p" />
         <Key
             hackkbd:keyLabel="@string/key_ae01_main"
             hackkbd:shiftLabel="@string/key_ae01_shift"
@@ -125,7 +130,7 @@
             hackkbd:codes="@integer/key_delete"
             hackkbd:keyIcon="@drawable/sym_keyboard_delete"
             hackkbd:iconPreview="@drawable/sym_keyboard_feedback_delete"
-            hackkbd:keyWidth="11.5%p"
+            hackkbd:keyWidth="8.25%p"
             hackkbd:isModifier="true"
             hackkbd:isRepeatable="true"
             hackkbd:keyEdgeFlags="right" />

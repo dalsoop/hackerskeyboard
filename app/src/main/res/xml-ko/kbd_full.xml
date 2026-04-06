@@ -55,12 +55,17 @@
         android:keyWidth="6.75%p"
     >
         <Key
+            android:keyLabel="Esc"
+            android:codes="@integer/key_escape"
+            android:keyWidth="4%p"
+            android:keyEdgeFlags="left"
+            android:isModifier="true" />
+        <Key
             android:keyLabel="@string/key_tlde_main"
             android:shiftLabel="@string/key_tlde_shift"
             android:popupKeyboard="@xml/kbd_popup_template"
             android:popupCharacters="@string/key_tlde_alt"
-            android:keyWidth="7.5%p"
-            android:keyEdgeFlags="left" />
+            android:keyWidth="6.75%p" />
         <Key
             android:keyLabel="@string/key_ae01_main"
             android:shiftLabel="@string/key_ae01_shift"
@@ -125,7 +130,7 @@
             android:codes="@integer/key_delete"
             android:keyIcon="@drawable/sym_keyboard_delete"
             android:iconPreview="@drawable/sym_keyboard_feedback_delete"
-            android:keyWidth="11.5%p"
+            android:keyWidth="8.25%p"
             android:isModifier="true"
             android:isRepeatable="true"
             android:keyEdgeFlags="right" />
