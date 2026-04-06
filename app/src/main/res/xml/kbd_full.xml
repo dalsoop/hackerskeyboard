@@ -52,11 +52,12 @@
     </Row>
     <Row
         hackkbd:rowEdgeFlags="top"
+        hackkbd:keyWidth="6.5%p"
     >
         <Key
             hackkbd:keyLabel="Esc"
             hackkbd:codes="@integer/key_escape"
-            hackkbd:keyWidth="3.5%p"
+            hackkbd:keyWidth="3%p"
             hackkbd:keyEdgeFlags="left"
             hackkbd:isModifier="true" />
         <Key
@@ -64,7 +65,7 @@
             hackkbd:shiftLabel="@string/key_tlde_shift"
             hackkbd:popupKeyboard="@xml/kbd_popup_template"
             hackkbd:popupCharacters="@string/key_tlde_alt"
-            hackkbd:keyWidth="3.5%p" />
+            hackkbd:keyWidth="3%p" />
         <Key
             hackkbd:keyLabel="@string/key_ae01_main"
             hackkbd:shiftLabel="@string/key_ae01_shift"
@@ -129,7 +130,7 @@
             hackkbd:codes="@integer/key_delete"
             hackkbd:keyIcon="@drawable/sym_keyboard_delete"
             hackkbd:iconPreview="@drawable/sym_keyboard_feedback_delete"
-            hackkbd:keyWidth="7.2857143%p"
+            hackkbd:keyWidth="16%p"
             hackkbd:isModifier="true"
             hackkbd:isRepeatable="true"
             hackkbd:keyEdgeFlags="right" />
