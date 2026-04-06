@@ -992,7 +992,7 @@ public class LatinIME extends InputMethodService implements
     public void onFinishInput() {
         super.onFinishInput();
 
-        mHangulComposer.reset();
+        if (mHangulComposer.isComposing()) commitHangulComposing();
         onAutoCompletionStateChanged(false);
 
         if (mKeyboardSwitcher.getInputView() != null) {
