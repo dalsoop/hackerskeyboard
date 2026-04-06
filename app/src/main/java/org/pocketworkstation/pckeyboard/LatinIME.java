@@ -2083,6 +2083,22 @@ public class LatinIME extends InputMethodService implements
             if (mHangulComposer.isComposing()) commitHangulComposing();
             showClipboardPopup(mKeyboardSwitcher.getInputView());
             break;
+        case -202: { // key_undo (Ctrl+Z)
+            if (mHangulComposer.isComposing()) commitHangulComposing();
+            InputConnection icUndo = getCurrentInputConnection();
+            if (icUndo != null) {
+                icUndo.performContextMenuAction(android.R.id.undo);
+            }
+            break;
+        }
+        case -203: { // key_redo (Ctrl+Shift+Z)
+            if (mHangulComposer.isComposing()) commitHangulComposing();
+            InputConnection icRedo = getCurrentInputConnection();
+            if (icRedo != null) {
+                icRedo.performContextMenuAction(android.R.id.redo);
+            }
+            break;
+        }
         case LatinKeyboardView.KEYCODE_COMPOSE:
             mComposeMode = !mComposeMode;
             mComposeBuffer.clear();

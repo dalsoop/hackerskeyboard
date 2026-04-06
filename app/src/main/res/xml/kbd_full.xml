@@ -375,16 +375,19 @@
             hackkbd:isSticky="true"
             hackkbd:isModifier="true" />
         <Key
-            hackkbd:codes="@integer/key_meta_left"
-            hackkbd:keyLabel="&#x2756;"
-            hackkbd:isSticky="true"
+            hackkbd:codes="@integer/key_undo"
+            hackkbd:keyLabel="&#x21A9;"
+            hackkbd:isModifier="true" />
+        <Key
+            hackkbd:codes="@integer/key_redo"
+            hackkbd:keyLabel="&#x21AA;"
             hackkbd:isModifier="true" />
         <Key
             hackkbd:codes="@integer/key_space"
             hackkbd:shiftLabel="@string/key_space_shift"
             hackkbd:keyIcon="@drawable/sym_keyboard_space"
             hackkbd:iconPreview="@drawable/sym_keyboard_feedback_space"
-            hackkbd:keyWidth="39.2857142857%p"
+            hackkbd:keyWidth="32.1428571%p"
             hackkbd:isModifier="true" />
         <Key
             hackkbd:codes="@integer/key_fn"
