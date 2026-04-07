@@ -2767,10 +2767,6 @@ public class LatinIME extends InputMethodService implements
 
     private void handleSeparator(int primaryCode) {
         boolean hadHangul = mHangulComposer.isComposing();
-        // Commit any pending Hangul composition before separator
-        if (hadHangul) {
-            commitHangulComposing();
-        }
 
         // Should dismiss the "Touch again to save" message when handling
         // separator
@@ -2784,9 +2780,16 @@ public class LatinIME extends InputMethodService implements
         InputConnection ic = getCurrentInputConnection();
         if (ic != null) {
             ic.beginBatchEdit();
-            // Skip abortCorrection if we just committed Hangul,
-            // it would call finishComposingText again causing doubling
-            if (!hadHangul) abortCorrection(false);
+            // Commit Hangul INSIDE this batch edit so it's atomic with separator
+            if (hadHangul) {
+                String hangulText = mHangulComposer.commit();
+                mHangulComposing.setLength(0);
+                if (hangulText != null && hangulText.length() > 0) {
+                    ic.commitText(hangulText, hangulText.length());
+                }
+            } else {
+                abortCorrection(false);
+            }
         }
         if (mPredicting) {
             // In certain languages where single quote is a separator, it's
