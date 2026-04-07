@@ -2783,19 +2783,21 @@ public class LatinIME extends InputMethodService implements
         }
 
         boolean pickedDefault = false;
-        // Commit hangul BEFORE getting IC — ensure composer is always reset
-        String hangulText = null;
+        // GaroKeypad pattern: commit hangul OUTSIDE batch edit
+        // so IC processes it immediately before Enter arrives
         if (hadHangul) {
-            hangulText = mHangulComposer.commit();
+            String hangulText = mHangulComposer.commit();
             mHangulComposing.setLength(0);
+            InputConnection hic = getCurrentInputConnection();
+            if (hic != null && hangulText != null && hangulText.length() > 0) {
+                hic.commitText(hangulText, hangulText.length());
+            }
         }
         // Handle separator
         InputConnection ic = getCurrentInputConnection();
         if (ic != null) {
             ic.beginBatchEdit();
-            if (hadHangul && hangulText != null && hangulText.length() > 0) {
-                ic.commitText(hangulText, hangulText.length());
-            } else if (!hadHangul) {
+            if (!hadHangul) {
                 abortCorrection(false);
             }
         }
