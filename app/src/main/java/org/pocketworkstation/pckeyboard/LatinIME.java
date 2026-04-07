@@ -2620,7 +2620,7 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void commitHangulComposing() {
-        if (!mHangulComposer.isComposing()) return;  // nothing to commit
+        if (!mHangulComposer.isComposing()) return;
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) {
             mHangulComposer.reset();
@@ -2630,9 +2630,9 @@ public class LatinIME extends InputMethodService implements
         String text = mHangulComposer.commit();
         mHangulComposing.setLength(0);
         if (text != null && text.length() > 0) {
-            ic.beginBatchEdit();
+            ic.setComposingText("", 0);
+            ic.finishComposingText();
             ic.commitText(text, text.length());
-            ic.endBatchEdit();
         }
     }
 
@@ -2783,13 +2783,16 @@ public class LatinIME extends InputMethodService implements
         }
 
         boolean pickedDefault = false;
-        // GaroKeypad pattern: commit hangul OUTSIDE batch edit
-        // so IC processes it immediately before Enter arrives
+        // Commit hangul OUTSIDE batch edit, with explicit composing clear
         if (hadHangul) {
             String hangulText = mHangulComposer.commit();
             mHangulComposing.setLength(0);
             InputConnection hic = getCurrentInputConnection();
             if (hic != null && hangulText != null && hangulText.length() > 0) {
+                // Workaround: some apps don't clear composing on commitText alone.
+                // Explicitly clear composing region, then commit as plain text.
+                hic.setComposingText("", 0);
+                hic.finishComposingText();
                 hic.commitText(hangulText, hangulText.length());
             }
         }
