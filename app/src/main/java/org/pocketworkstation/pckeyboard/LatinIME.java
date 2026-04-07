@@ -2614,19 +2614,20 @@ public class LatinIME extends InputMethodService implements
     }
 
     private void commitHangulComposing() {
+        if (!mHangulComposer.isComposing()) return;  // nothing to commit
         InputConnection ic = getCurrentInputConnection();
-        if (ic == null) return;
+        if (ic == null) {
+            mHangulComposer.reset();
+            mHangulComposing.setLength(0);
+            return;
+        }
         String text = mHangulComposer.commit();
         mHangulComposing.setLength(0);
-        ic.beginBatchEdit();
         if (text != null && text.length() > 0) {
-            // GaroKeypad pattern: commitText(text, text.length())
-            // Second param = cursor position after commit (length = end of text)
+            ic.beginBatchEdit();
             ic.commitText(text, text.length());
-        } else {
-            ic.finishComposingText();
+            ic.endBatchEdit();
         }
-        ic.endBatchEdit();
     }
 
     private void setupActionToolbar() {
@@ -2776,18 +2777,19 @@ public class LatinIME extends InputMethodService implements
         }
 
         boolean pickedDefault = false;
+        // Commit hangul BEFORE getting IC — ensure composer is always reset
+        String hangulText = null;
+        if (hadHangul) {
+            hangulText = mHangulComposer.commit();
+            mHangulComposing.setLength(0);
+        }
         // Handle separator
         InputConnection ic = getCurrentInputConnection();
         if (ic != null) {
             ic.beginBatchEdit();
-            // Commit Hangul INSIDE this batch edit so it's atomic with separator
-            if (hadHangul) {
-                String hangulText = mHangulComposer.commit();
-                mHangulComposing.setLength(0);
-                if (hangulText != null && hangulText.length() > 0) {
-                    ic.commitText(hangulText, hangulText.length());
-                }
-            } else {
+            if (hadHangul && hangulText != null && hangulText.length() > 0) {
+                ic.commitText(hangulText, hangulText.length());
+            } else if (!hadHangul) {
                 abortCorrection(false);
             }
         }
