@@ -2627,9 +2627,15 @@ public class LatinIME extends InputMethodService implements
             mHangulComposing.setLength(0);
             return;
         }
-        mHangulComposer.commit();
+        String text = mHangulComposer.commit();
         mHangulComposing.setLength(0);
-        ic.finishComposingText();
+        if (text != null && text.length() > 0) {
+            ic.setComposingText("", 0);
+            ic.finishComposingText();
+            ic.commitText(text, 1);
+        } else {
+            ic.finishComposingText();
+        }
     }
 
     private void setupActionToolbar() {
@@ -2779,15 +2785,15 @@ public class LatinIME extends InputMethodService implements
         }
 
         boolean pickedDefault = false;
-        // Simplest approach: just finalize composing text as-is.
-        // With .toString() fix, composing region has correct text.
-        // finishComposingText removes composing span without changing text.
         if (hadHangul) {
-            mHangulComposer.commit();
+            String hangulText = mHangulComposer.commit();
             mHangulComposing.setLength(0);
             InputConnection hic = getCurrentInputConnection();
-            if (hic != null) {
-                hic.finishComposingText();
+            if (hic != null && hangulText != null && hangulText.length() > 0) {
+                // 3-step: clear composing → remove span → insert as plain text
+                hic.setComposingText("", 0);     // composing "한" → ""
+                hic.finishComposingText();         // composing span 완전 제거
+                hic.commitText(hangulText, 1);     // "한" 을 일반 텍스트로 삽입
             }
         }
         // Handle separator
