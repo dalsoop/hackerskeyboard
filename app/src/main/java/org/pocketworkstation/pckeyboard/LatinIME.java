@@ -2627,11 +2627,9 @@ public class LatinIME extends InputMethodService implements
             mHangulComposing.setLength(0);
             return;
         }
-        String text = mHangulComposer.commit();
+        mHangulComposer.commit();
         mHangulComposing.setLength(0);
-        if (text != null && text.length() > 0) {
-            ic.commitText(text, text.length());
-        }
+        ic.finishComposingText();
     }
 
     private void setupActionToolbar() {
@@ -2781,13 +2779,15 @@ public class LatinIME extends InputMethodService implements
         }
 
         boolean pickedDefault = false;
-        // Commit hangul OUTSIDE batch edit, with explicit composing clear
+        // Simplest approach: just finalize composing text as-is.
+        // With .toString() fix, composing region has correct text.
+        // finishComposingText removes composing span without changing text.
         if (hadHangul) {
-            String hangulText = mHangulComposer.commit();
+            mHangulComposer.commit();
             mHangulComposing.setLength(0);
             InputConnection hic = getCurrentInputConnection();
-            if (hic != null && hangulText != null && hangulText.length() > 0) {
-                hic.commitText(hangulText, hangulText.length());
+            if (hic != null) {
+                hic.finishComposingText();
             }
         }
         // Handle separator
