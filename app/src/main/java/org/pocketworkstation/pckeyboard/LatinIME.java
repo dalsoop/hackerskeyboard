@@ -2620,10 +2620,9 @@ public class LatinIME extends InputMethodService implements
         mHangulComposing.setLength(0);
         ic.beginBatchEdit();
         if (text != null && text.length() > 0) {
-            // commitText atomically replaces composing region with text.
-            // finishComposingText alone fails on some apps (last char remains).
-            // Double-call is prevented by hadHangul guard in handleSeparator.
-            ic.commitText(text, 1);
+            // GaroKeypad pattern: commitText(text, text.length())
+            // Second param = cursor position after commit (length = end of text)
+            ic.commitText(text, text.length());
         } else {
             ic.finishComposingText();
         }
@@ -2820,7 +2819,12 @@ public class LatinIME extends InputMethodService implements
             removeTrailingSpace();
             mJustAddedAutoSpace = false;
         }
-        sendModifiableKeyChar((char) primaryCode);
+        if (hadHangul && primaryCode == ASCII_ENTER) {
+            // GaroKeypad pattern: send Enter as KeyEvent after Hangul commit
+            sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
+        } else {
+            sendModifiableKeyChar((char) primaryCode);
+        }
 
         // Handle the case of ". ." -> " .." with auto-space if necessary
         // before changing the TextEntryState.
