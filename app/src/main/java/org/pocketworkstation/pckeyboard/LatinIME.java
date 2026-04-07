@@ -1012,6 +1012,7 @@ public class LatinIME extends InputMethodService implements
     @Override
     public void onFinishInputView(boolean finishingInput) {
         super.onFinishInputView(finishingInput);
+        if (mHangulComposer.isComposing()) commitHangulComposing();
         // Remove penging messages related to update suggestions
         mHandler.removeMessages(MSG_UPDATE_SUGGESTIONS);
         mHandler.removeMessages(MSG_UPDATE_OLD_SUGGESTIONS);
@@ -1037,6 +1038,7 @@ public class LatinIME extends InputMethodService implements
             mComposing.setLength(0);
             mPredicting = false;
             mHangulComposer.reset();
+            mHangulComposing.setLength(0);
             postUpdateSuggestions();
             TextEntryState.reset();
             InputConnection ic = getCurrentInputConnection();
