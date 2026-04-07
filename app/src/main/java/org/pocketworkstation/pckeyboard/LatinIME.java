@@ -2786,11 +2786,15 @@ public class LatinIME extends InputMethodService implements
 
         boolean pickedDefault = false;
         if (hadHangul) {
-            // Just reset our internal state.
-            // DON'T touch InputConnection — let sendModifiableKeyChar('\n')
-            // naturally commit the composing text via the system.
             mHangulComposer.reset();
             mHangulComposing.setLength(0);
+            // Send Enter as real KeyEvent — this forces the system to
+            // commit composing text automatically before processing Enter.
+            // sendModifiableKeyChar('\n') just inserts text and doesn't
+            // trigger composing auto-commit.
+            sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
+            // Skip the rest of handleSeparator — Enter already sent
+            return;
         }
         // Handle separator
         InputConnection ic = getCurrentInputConnection();
