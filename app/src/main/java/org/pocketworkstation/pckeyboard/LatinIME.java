@@ -2786,15 +2786,11 @@ public class LatinIME extends InputMethodService implements
 
         boolean pickedDefault = false;
         if (hadHangul) {
-            String hangulText = mHangulComposer.commit();
+            // Just reset our internal state.
+            // DON'T touch InputConnection — let sendModifiableKeyChar('\n')
+            // naturally commit the composing text via the system.
+            mHangulComposer.reset();
             mHangulComposing.setLength(0);
-            InputConnection hic = getCurrentInputConnection();
-            if (hic != null && hangulText != null && hangulText.length() > 0) {
-                // 3-step: clear composing → remove span → insert as plain text
-                hic.setComposingText("", 0);     // composing "한" → ""
-                hic.finishComposingText();         // composing span 완전 제거
-                hic.commitText(hangulText, 1);     // "한" 을 일반 텍스트로 삽입
-            }
         }
         // Handle separator
         InputConnection ic = getCurrentInputConnection();
