@@ -2823,8 +2823,15 @@ public class LatinIME extends InputMethodService implements
             mJustAddedAutoSpace = false;
         }
         if (hadHangul && primaryCode == ASCII_ENTER) {
-            // GaroKeypad pattern: send Enter as KeyEvent after Hangul commit
-            sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
+            // Use sendDefaultEditorAction for chat apps (IME_ACTION_SEND etc.)
+            // Falls back to Enter key event if no editor action is defined.
+            EditorInfo ei = getCurrentInputEditorInfo();
+            if (ei != null && (ei.imeOptions & EditorInfo.IME_FLAG_NO_ENTER_ACTION) == 0
+                    && ei.actionId != 0) {
+                getCurrentInputConnection().performEditorAction(ei.actionId);
+            } else if (!sendDefaultEditorAction(false)) {
+                sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
+            }
         } else {
             sendModifiableKeyChar((char) primaryCode);
         }
