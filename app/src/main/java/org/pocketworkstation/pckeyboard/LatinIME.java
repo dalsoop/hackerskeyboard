@@ -2288,7 +2288,7 @@ public class LatinIME extends InputMethodService implements
                     // Update composing text with decomposed jamo
                     mHangulComposing.setLength(0);
                     mHangulComposing.append(mHangulComposer.getComposing());
-                    ic.setComposingText(mHangulComposing, 1);
+                    ic.setComposingText(mHangulComposing.toString(), 1);
                 } else {
                     // Fully deleted: clear composing region
                     mHangulComposing.setLength(0);
@@ -2599,7 +2599,7 @@ public class LatinIME extends InputMethodService implements
                 // Update composing to the completed syllable, then finish it
                 mHangulComposing.setLength(0);
                 mHangulComposing.append(commitText);
-                ic.setComposingText(mHangulComposing, 1);
+                ic.setComposingText(mHangulComposing.toString(), 1);
                 ic.finishComposingText();
             }
             mHangulComposing.setLength(0);
@@ -2613,7 +2613,7 @@ public class LatinIME extends InputMethodService implements
                 mHangulComposing.setLength(0);
             }
             mHangulComposing.append(composing);
-            ic.setComposingText(mHangulComposing, 1);
+            ic.setComposingText(mHangulComposing.toString(), 1);
         }
 
         ic.endBatchEdit();
@@ -2630,8 +2630,6 @@ public class LatinIME extends InputMethodService implements
         String text = mHangulComposer.commit();
         mHangulComposing.setLength(0);
         if (text != null && text.length() > 0) {
-            ic.setComposingText("", 0);
-            ic.finishComposingText();
             ic.commitText(text, text.length());
         }
     }
@@ -2789,10 +2787,6 @@ public class LatinIME extends InputMethodService implements
             mHangulComposing.setLength(0);
             InputConnection hic = getCurrentInputConnection();
             if (hic != null && hangulText != null && hangulText.length() > 0) {
-                // Workaround: some apps don't clear composing on commitText alone.
-                // Explicitly clear composing region, then commit as plain text.
-                hic.setComposingText("", 0);
-                hic.finishComposingText();
                 hic.commitText(hangulText, hangulText.length());
             }
         }
