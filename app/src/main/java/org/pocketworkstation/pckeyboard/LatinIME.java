@@ -803,6 +803,10 @@ public class LatinIME extends InputMethodService implements
     
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
+        // Reset hangul state for new input session
+        mHangulComposer.reset();
+        mHangulComposing.setLength(0);
+
         sKeyboardSettings.editorPackageName = attribute.packageName;
         sKeyboardSettings.editorFieldName = attribute.fieldName;
         sKeyboardSettings.editorFieldId = attribute.fieldId;
