@@ -2824,19 +2824,7 @@ public class LatinIME extends InputMethodService implements
             removeTrailingSpace();
             mJustAddedAutoSpace = false;
         }
-        if (hadHangul && primaryCode == ASCII_ENTER) {
-            // Use sendDefaultEditorAction for chat apps (IME_ACTION_SEND etc.)
-            // Falls back to Enter key event if no editor action is defined.
-            EditorInfo ei = getCurrentInputEditorInfo();
-            if (ei != null && (ei.imeOptions & EditorInfo.IME_FLAG_NO_ENTER_ACTION) == 0
-                    && ei.actionId != 0) {
-                getCurrentInputConnection().performEditorAction(ei.actionId);
-            } else if (!sendDefaultEditorAction(false)) {
-                sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
-            }
-        } else {
-            sendModifiableKeyChar((char) primaryCode);
-        }
+        sendModifiableKeyChar((char) primaryCode);
 
         // Handle the case of ". ." -> " .." with auto-space if necessary
         // before changing the TextEntryState.
