@@ -2622,20 +2622,10 @@ public class LatinIME extends InputMethodService implements
     private void commitHangulComposing() {
         if (!mHangulComposer.isComposing()) return;
         InputConnection ic = getCurrentInputConnection();
-        if (ic == null) {
-            mHangulComposer.reset();
-            mHangulComposing.setLength(0);
-            return;
-        }
-        String text = mHangulComposer.commit();
+        // finishComposingText BEFORE reset — composing text still intact
+        if (ic != null) ic.finishComposingText();
+        mHangulComposer.reset();
         mHangulComposing.setLength(0);
-        if (text != null && text.length() > 0) {
-            ic.setComposingText("", 0);
-            ic.finishComposingText();
-            ic.commitText(text, 1);
-        } else {
-            ic.finishComposingText();
-        }
     }
 
     private void setupActionToolbar() {
@@ -2786,14 +2776,16 @@ public class LatinIME extends InputMethodService implements
 
         boolean pickedDefault = false;
         if (hadHangul) {
+            // 1. finishComposingText BEFORE reset — composing "한" still intact
+            //    This commits the composing text as regular text
+            InputConnection hic = getCurrentInputConnection();
+            if (hic != null) hic.finishComposingText();
+            // 2. Reset our internal state
             mHangulComposer.reset();
             mHangulComposing.setLength(0);
-            // Send Enter as real KeyEvent — this forces the system to
-            // commit composing text automatically before processing Enter.
-            // sendModifiableKeyChar('\n') just inserts text and doesn't
-            // trigger composing auto-commit.
+            // 3. Send Enter as real KeyEvent
             sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
-            // Skip the rest of handleSeparator — Enter already sent
+            // 4. Early return — skip all other handleSeparator processing
             return;
         }
         // Handle separator
