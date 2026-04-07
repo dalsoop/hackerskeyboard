@@ -2616,10 +2616,17 @@ public class LatinIME extends InputMethodService implements
     private void commitHangulComposing() {
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
-        mHangulComposer.commit();
+        String text = mHangulComposer.commit();
         mHangulComposing.setLength(0);
         ic.beginBatchEdit();
-        ic.finishComposingText();
+        if (text != null && text.length() > 0) {
+            // commitText atomically replaces composing region with text.
+            // finishComposingText alone fails on some apps (last char remains).
+            // Double-call is prevented by hadHangul guard in handleSeparator.
+            ic.commitText(text, 1);
+        } else {
+            ic.finishComposingText();
+        }
         ic.endBatchEdit();
     }
 
