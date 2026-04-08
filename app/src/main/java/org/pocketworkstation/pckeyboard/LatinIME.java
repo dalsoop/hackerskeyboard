@@ -803,10 +803,6 @@ public class LatinIME extends InputMethodService implements
     
     @Override
     public void onStartInputView(EditorInfo attribute, boolean restarting) {
-        // Reset hangul state for new input session
-        mHangulComposer.reset();
-        mHangulComposing.setLength(0);
-
         sKeyboardSettings.editorPackageName = attribute.packageName;
         sKeyboardSettings.editorFieldName = attribute.fieldName;
         sKeyboardSettings.editorFieldId = attribute.fieldId;
@@ -1012,7 +1008,6 @@ public class LatinIME extends InputMethodService implements
     @Override
     public void onFinishInputView(boolean finishingInput) {
         super.onFinishInputView(finishingInput);
-        if (mHangulComposer.isComposing()) commitHangulComposing();
         // Remove penging messages related to update suggestions
         mHandler.removeMessages(MSG_UPDATE_SUGGESTIONS);
         mHandler.removeMessages(MSG_UPDATE_OLD_SUGGESTIONS);
@@ -1038,7 +1033,6 @@ public class LatinIME extends InputMethodService implements
             mComposing.setLength(0);
             mPredicting = false;
             mHangulComposer.reset();
-            mHangulComposing.setLength(0);
             postUpdateSuggestions();
             TextEntryState.reset();
             InputConnection ic = getCurrentInputConnection();
@@ -2288,7 +2282,7 @@ public class LatinIME extends InputMethodService implements
                     // Update composing text with decomposed jamo
                     mHangulComposing.setLength(0);
                     mHangulComposing.append(mHangulComposer.getComposing());
-                    ic.setComposingText(mHangulComposing.toString(), 1);
+                    ic.setComposingText(mHangulComposing, 1);
                 } else {
                     // Fully deleted: clear composing region
                     mHangulComposing.setLength(0);
@@ -2599,7 +2593,7 @@ public class LatinIME extends InputMethodService implements
                 // Update composing to the completed syllable, then finish it
                 mHangulComposing.setLength(0);
                 mHangulComposing.append(commitText);
-                ic.setComposingText(mHangulComposing.toString(), 1);
+                ic.setComposingText(mHangulComposing, 1);
                 ic.finishComposingText();
             }
             mHangulComposing.setLength(0);
@@ -2613,19 +2607,20 @@ public class LatinIME extends InputMethodService implements
                 mHangulComposing.setLength(0);
             }
             mHangulComposing.append(composing);
-            ic.setComposingText(mHangulComposing.toString(), 1);
+            ic.setComposingText(mHangulComposing, 1);
         }
 
         ic.endBatchEdit();
     }
 
     private void commitHangulComposing() {
-        if (!mHangulComposer.isComposing()) return;
         InputConnection ic = getCurrentInputConnection();
-        // finishComposingText BEFORE reset — composing text still intact
-        if (ic != null) ic.finishComposingText();
-        mHangulComposer.reset();
+        if (ic == null) return;
+        mHangulComposer.commit();
         mHangulComposing.setLength(0);
+        ic.beginBatchEdit();
+        ic.finishComposingText();
+        ic.endBatchEdit();
     }
 
     private void setupActionToolbar() {
@@ -2766,6 +2761,10 @@ public class LatinIME extends InputMethodService implements
 
     private void handleSeparator(int primaryCode) {
         boolean hadHangul = mHangulComposer.isComposing();
+        // Commit any pending Hangul composition before separator
+        if (hadHangul) {
+            commitHangulComposing();
+        }
 
         // Should dismiss the "Touch again to save" message when handling
         // separator
@@ -2775,26 +2774,13 @@ public class LatinIME extends InputMethodService implements
         }
 
         boolean pickedDefault = false;
-        if (hadHangul) {
-            // 1. finishComposingText BEFORE reset — composing "한" still intact
-            //    This commits the composing text as regular text
-            InputConnection hic = getCurrentInputConnection();
-            if (hic != null) hic.finishComposingText();
-            // 2. Reset our internal state
-            mHangulComposer.reset();
-            mHangulComposing.setLength(0);
-            // 3. Send Enter as real KeyEvent
-            sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
-            // 4. Early return — skip all other handleSeparator processing
-            return;
-        }
         // Handle separator
         InputConnection ic = getCurrentInputConnection();
         if (ic != null) {
             ic.beginBatchEdit();
-            if (!hadHangul) {
-                abortCorrection(false);
-            }
+            // Skip abortCorrection if we just committed Hangul,
+            // it would call finishComposingText again causing doubling
+            if (!hadHangul) abortCorrection(false);
         }
         if (mPredicting) {
             // In certain languages where single quote is a separator, it's
