@@ -747,6 +747,19 @@ public class LatinIME extends InputMethodService implements
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
+        // Commit any pending composing text from previous input session.
+        // Prevents composing text leaking to next input (e.g. after sending in KakaoTalk)
+        InputConnection ic = getCurrentInputConnection();
+        if (mHangulComposer.isComposing()) {
+            if (ic != null) ic.finishComposingText();
+            mHangulComposer.reset();
+            mHangulComposing.setLength(0);
+        }
+        if (mComposing.length() > 0 && mPredicting) {
+            if (ic != null) ic.finishComposingText();
+            mComposing.setLength(0);
+            mPredicting = false;
+        }
         if(!restarting)
             resetCompletions();
         // setCandidatesViewShown(true);
