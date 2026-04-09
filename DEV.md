@@ -114,6 +114,6 @@ onFinishInput()       ← 입력 필드 떠남
 
 ### 알려진 주의사항
 
-1. **handleSeparator의 한글 Enter 처리**: 한글 composing 중 separator(마침표 등)를 치면 한글 commit 후 `sendDownUpKeyEvents(KEYCODE_ENTER)` + early return함. 마침표/쉼표 등 비-Enter separator도 Enter로 처리되는 문제 있음 (향후 수정 필요)
-2. **setComposingText에 StringBuilder 직접 전달**: 일부 앱에서 mutable reference 문제 발생 가능. `.toString()` 사용 권장
-3. **commitHangulComposing()**: `finishComposingText()`를 `reset()` 전에 호출해야 함. 순서 바꾸면 빈 텍스트가 commit됨
+1. **setComposingText에 StringBuilder 직접 전달**: 일부 앱에서 mutable reference 문제 발생 가능. `.toString()` 사용 권장
+2. **commitHangulComposing()**: `finishComposingText()`를 `reset()` 전에 호출해야 함. 순서 바꾸면 빈 텍스트가 commit됨
+3. **handleSeparator 한글 처리**: 현재는 `commitHangulComposing()` 후 separator 문자가 정상 전송됨. 4월 7일 커밋에서 Enter early return 버그가 있었으나 리버트로 해결됨
