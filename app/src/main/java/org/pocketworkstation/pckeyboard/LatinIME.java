@@ -468,6 +468,7 @@ public class LatinIME extends InputMethodService implements
         int screenHeightPercent = isPortrait ? mHeightPortrait : mHeightLandscape;
 
         // Foldable: override mode and height for narrow/wide screens
+        LatinIME.sKeyboardSettings.narrowScreen = mFoldable.isNarrow();
         int foldModeOverride = mFoldable.getKeyboardModeOverride();
         if (foldModeOverride >= 0) {
             kbMode = foldModeOverride;
