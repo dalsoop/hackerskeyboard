@@ -351,8 +351,8 @@
 
     <Preference
             android:key="pref_hangul_debug_log"
-            android:title="한글 디버그 로그"
-            android:summary="한글 조합 상태/IC 호출/에러 확인">
+            android:title="디버그 로그"
+            android:summary="키 입력/조합 상태/IC 호출/예외/크래시 확인">
         <intent android:action="android.intent.action.MAIN"
                 android:targetPackage="org.pocketworkstation.pckeyboard"
                 android:targetClass="org.pocketworkstation.pckeyboard.HangulDebugActivity" />

@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="HangulDebugActivity" android:label="한글 디버그 로그"
+        <activity android:name="HangulDebugActivity" android:label="디버그 로그"
                 android:exported="true" />
         <activity android:name="LatinIMESettings" android:label="@string/english_ime_settings"
                 android:exported="false">

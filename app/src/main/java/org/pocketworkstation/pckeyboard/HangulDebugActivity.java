@@ -75,7 +75,7 @@ public class HangulDebugActivity extends Activity {
                 LinearLayout.LayoutParams.MATCH_PARENT, 1));
 
         setContentView(root);
-        setTitle("한글 디버그 로그");
+        setTitle("디버그 로그");
 
         refreshLog();
 
