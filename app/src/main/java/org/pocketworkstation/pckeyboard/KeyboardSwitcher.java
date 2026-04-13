@@ -82,7 +82,6 @@ public class KeyboardSwitcher implements
     private static final int KBD_FULL_FN = R.xml.kbd_full_fn;
     private static final int KBD_COMPACT = R.xml.kbd_compact;
     private static final int KBD_COMPACT_FN = R.xml.kbd_compact_fn;
-    private static final int KBD_QWERTY_NARROW = R.xml.kbd_qwerty_narrow;
 
     private LatinKeyboardView mInputView;
     private static final int[] ALPHABET_MODES = { KEYBOARDMODE_NORMAL,
@@ -371,9 +370,8 @@ public class KeyboardSwitcher implements
                         KEYBOARDMODE_NORMAL, true, hasVoice);
             }
         }
-        // Use narrow layout on foldable cover screens
-        int keyboardRowsResId = LatinIME.sKeyboardSettings.narrowScreen
-                ? KBD_QWERTY_NARROW : KBD_QWERTY;
+        // TODO: generalize for any KeyboardId
+        int keyboardRowsResId = KBD_QWERTY;
         if (isSymbols) {
             if (mode == MODE_PHONE) {
                 return new KeyboardId(KBD_PHONE_SYMBOLS, 0, false, hasVoice);

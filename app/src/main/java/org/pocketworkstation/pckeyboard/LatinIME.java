@@ -237,7 +237,6 @@ public class LatinIME extends InputMethodService implements
     private int mHeightLandscape;
     private int mNumKeyboardModes = 3;
     private int mKeyboardModeOverridePortrait;
-    private final FoldableSupport mFoldable = new FoldableSupport();
     private int mKeyboardModeOverrideLandscape;
     private int mCorrectionMode;
     private boolean mEnableVoice = true;
@@ -373,7 +372,6 @@ public class LatinIME extends InputMethodService implements
         mResources = getResources();
         final Configuration conf = mResources.getConfiguration();
         mOrientation = conf.orientation;
-        mFoldable.update(conf);
         final SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
         mLanguageSwitcher = new LanguageSwitcher(this);
@@ -466,16 +464,6 @@ public class LatinIME extends InputMethodService implements
         }
         // Convert overall keyboard height to per-row percentage
         int screenHeightPercent = isPortrait ? mHeightPortrait : mHeightLandscape;
-
-        // Foldable: override mode and height for narrow/wide screens
-        LatinIME.sKeyboardSettings.narrowScreen = mFoldable.isNarrow();
-        int foldModeOverride = mFoldable.getKeyboardModeOverride();
-        if (foldModeOverride >= 0) {
-            kbMode = foldModeOverride;
-        }
-        screenHeightPercent += mFoldable.getHeightAdjustment();
-        screenHeightPercent = Math.max(15, Math.min(75, screenHeightPercent));
-
         LatinIME.sKeyboardSettings.keyboardMode = kbMode;
         LatinIME.sKeyboardSettings.keyboardHeightPercent = (float) screenHeightPercent;
     }
@@ -707,9 +695,8 @@ public class LatinIME extends InputMethodService implements
                 reloadKeyboards();
             }
         }
-        // If orientation changed or foldable screen changed, rebuild keyboards
-        boolean screenClassChanged = mFoldable.update(conf);
-        if (conf.orientation != mOrientation || screenClassChanged) {
+        // If orientation changed while predicting, commit the change
+        if (conf.orientation != mOrientation) {
             InputConnection ic = getCurrentInputConnection();
             commitTyped(ic, true);
             if (ic != null)

@@ -98,9 +98,6 @@ public final class GlobalKeyboardSettings {
     // Ctrl key active state (for showing shortcut labels on keys)
     public boolean ctrlActive = false;
 
-    // Foldable: narrow screen detected (cover screen / split-screen)
-    public boolean narrowScreen = false;
-
     // Auto pref implementation follows
     private Map<String, BooleanPref> mBoolPrefs = new HashMap<String, BooleanPref>();
     private Map<String, StringPref> mStringPrefs = new HashMap<String, StringPref>();
