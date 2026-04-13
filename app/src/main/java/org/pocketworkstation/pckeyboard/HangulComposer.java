@@ -263,6 +263,7 @@ public class HangulComposer {
      * Returns the text to commit (if any) before the new composing text.
      */
     public String process(int code) {
+        int oldState = mState;
         String commit = null;
         int cho = getChoIndex(code);
         int jung = getJungIndex(code);
@@ -275,6 +276,10 @@ public class HangulComposer {
             // Not a jamo - commit current and pass through
             commit = getComposing();
             reset();
+        }
+        HangulDebugLog.state(oldState, mState, code, getComposing());
+        if (commit != null && !commit.isEmpty()) {
+            HangulDebugLog.commit(commit);
         }
         return commit;
     }

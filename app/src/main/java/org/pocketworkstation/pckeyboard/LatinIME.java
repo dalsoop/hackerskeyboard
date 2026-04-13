@@ -2611,6 +2611,7 @@ public class LatinIME extends InputMethodService implements
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
 
+        HangulDebugLog.key("hangul", code);
         ic.beginBatchEdit();
 
         boolean wasComposing = mHangulComposer.isComposing();
@@ -2623,7 +2624,9 @@ public class LatinIME extends InputMethodService implements
                 // Update composing to the completed syllable, then finish it
                 mHangulComposing.setLength(0);
                 mHangulComposing.append(commitText);
-                ic.setComposingText(mHangulComposing, 1);
+                HangulDebugLog.ic("setComposingText", mHangulComposing.toString());
+                ic.setComposingText(mHangulComposing.toString(), 1);
+                HangulDebugLog.ic("finishComposingText", "");
                 ic.finishComposingText();
             }
             mHangulComposing.setLength(0);
@@ -2637,7 +2640,8 @@ public class LatinIME extends InputMethodService implements
                 mHangulComposing.setLength(0);
             }
             mHangulComposing.append(composing);
-            ic.setComposingText(mHangulComposing, 1);
+            HangulDebugLog.ic("setComposingText", mHangulComposing.toString());
+            ic.setComposingText(mHangulComposing.toString(), 1);
         }
 
         ic.endBatchEdit();
