@@ -1,5 +1,7 @@
 package org.pocketworkstation.pckeyboard;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,11 +10,12 @@ import java.util.Locale;
 
 /**
  * Ring buffer logger for Hangul composition debugging.
- * Captures state transitions, IC calls, and errors.
+ * Captures state transitions, IC calls, errors, and uncaught exceptions.
  * Viewable from keyboard settings.
  */
 public class HangulDebugLog {
     private static final int MAX_ENTRIES = 200;
+    private static Thread.UncaughtExceptionHandler sOriginalHandler;
     private static final String[] STATES = {"NONE", "CHO", "JUNG", "JONG"};
 
     private static final ArrayList<String> sLog = new ArrayList<>();
@@ -64,6 +67,49 @@ public class HangulDebugLog {
     /** Log error */
     public static void error(String msg) {
         log("ERROR", msg);
+    }
+
+    /** Log exception with stack trace */
+    public static void exception(String context, Throwable t) {
+        StringWriter sw = new StringWriter();
+        t.printStackTrace(new PrintWriter(sw));
+        String trace = sw.toString();
+        // 스택 트레이스에서 핵심 라인만 추출 (최대 8줄)
+        String[] lines = trace.split("\n");
+        StringBuilder brief = new StringBuilder();
+        brief.append(context).append(": ").append(t.getClass().getSimpleName())
+             .append(": ").append(t.getMessage());
+        int count = 0;
+        for (String line : lines) {
+            if (line.contains("pckeyboard") && count < 8) {
+                brief.append("\n  ").append(line.trim());
+                count++;
+            }
+        }
+        log("EXCEPTION", brief.toString());
+    }
+
+    /** Install global uncaught exception handler */
+    public static void installCrashHandler() {
+        sOriginalHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            StringWriter sw = new StringWriter();
+            throwable.printStackTrace(new PrintWriter(sw));
+            log("CRASH", thread.getName() + ": " + throwable.getClass().getSimpleName()
+                    + ": " + throwable.getMessage());
+            String[] lines = sw.toString().split("\n");
+            int count = 0;
+            for (String line : lines) {
+                if (count < 15) {
+                    log("CRASH", "  " + line.trim());
+                    count++;
+                }
+            }
+            // 원래 핸들러 호출 (시스템 크래시 리포팅)
+            if (sOriginalHandler != null) {
+                sOriginalHandler.uncaughtException(thread, throwable);
+            }
+        });
     }
 
     /** Log key event */

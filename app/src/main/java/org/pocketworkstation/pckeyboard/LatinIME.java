@@ -374,6 +374,7 @@ public class LatinIME extends InputMethodService implements
         sInstance = this;
         // setStatusIcon(R.drawable.ime_qwerty);
         mClipboardHistory.start(this);
+        HangulDebugLog.installCrashHandler();
         mResources = getResources();
         final Configuration conf = mResources.getConfiguration();
         mOrientation = conf.orientation;
@@ -552,7 +553,7 @@ public class LatinIME extends InputMethodService implements
             try {
                 notificationManager.notify(NOTIFICATION_ONGOING_ID, mBuilder.build());
             } catch(SecurityException e) {
-                // permission not held => so be it
+                HangulDebugLog.exception("notification", e);
             }
 
         } else if (mNotificationReceiver != null) {
@@ -2612,6 +2613,7 @@ public class LatinIME extends InputMethodService implements
         if (ic == null) return;
 
         HangulDebugLog.key("hangul", code);
+        try {
         ic.beginBatchEdit();
 
         boolean wasComposing = mHangulComposer.isComposing();
@@ -2645,6 +2647,9 @@ public class LatinIME extends InputMethodService implements
         }
 
         ic.endBatchEdit();
+        } catch (Exception e) {
+            HangulDebugLog.exception("handleHangulCharacter", e);
+        }
     }
 
     private void commitHangulComposing() {
@@ -2730,6 +2735,7 @@ public class LatinIME extends InputMethodService implements
             }
             dialog.show();
         } catch (Exception e) {
+            HangulDebugLog.exception("clipboardDialog", e);
             // Fallback: just paste the first item directly
             if (!items.isEmpty()) {
                 InputConnection ic = getCurrentInputConnection();
@@ -2778,7 +2784,7 @@ public class LatinIME extends InputMethodService implements
             }
             dialog.show();
         } catch (Exception e) {
-            // Silently fail if dialog can't be shown
+            HangulDebugLog.exception("emojiDialog", e);
         }
     }
 
