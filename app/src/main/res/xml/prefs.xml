@@ -63,10 +63,19 @@
             android:persistent="true"
             />
 
+    <org.pocketworkstation.pckeyboard.AutoSummaryListPreference
+            android:key="pref_cover_screen_action"
+            android:title="@string/title_cover_screen_action"
+            android:entryValues="@array/cover_screen_action_values"
+            android:entries="@array/cover_screen_action_entries"
+            android:defaultValue="keep"
+            android:persistent="true"
+            />
+
     <CheckBoxPreference
             android:key="suggestions_in_landscape"
             android:title="@string/title_suggestions_in_landscape"
-            android:persistent="true" 
+            android:persistent="true"
             android:defaultValue="@bool/default_suggestions_in_landscape"
             android:summaryOn="@string/summary_suggestions_in_landscape_true"
             android:summaryOff="@string/summary_suggestions_in_landscape_false"

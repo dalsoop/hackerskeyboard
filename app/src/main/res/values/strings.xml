@@ -405,6 +405,16 @@
         <item>2</item>
     </string-array>
 
+    <string name="title_cover_screen_action">Cover screen (foldable)</string>
+    <string-array name="cover_screen_action_entries">
+        <item>Keep this keyboard</item>
+        <item>Show keyboard picker</item>
+    </string-array>
+    <string-array name="cover_screen_action_values">
+        <item>keep</item>
+        <item>picker</item>
+    </string-array>
+
     <string name="title_ctrl_a_override">Ctrl-A (select all) override</string>
     <string name="toast_ctrl_a_override_info">Ctrl-A is disabled. Use Ctrl-Alt-A instead, or enable it in settings.</string>
     <string name="default_ctrl_a_override">0</string>

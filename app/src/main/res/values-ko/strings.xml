@@ -302,6 +302,13 @@
       "]]>
     </Data></string>
 
+    <!-- 커버 화면 (폴더블) -->
+    <string name="title_cover_screen_action">커버 화면 (폴더블)</string>
+    <string-array name="cover_screen_action_entries">
+        <item>이 키보드 유지</item>
+        <item>키보드 선택 표시</item>
+    </string-array>
+
     <!-- 키보드 모드 -->
     <string-array name="keyboard_mode_entries">
         <item>4행 Gingerbread 레이아웃</item>

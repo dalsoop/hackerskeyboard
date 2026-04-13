@@ -135,6 +135,9 @@ public class LatinIME extends InputMethodService implements
     static final String PREF_SWIPE_RIGHT = "pref_swipe_right";
     static final String PREF_VOL_UP = "pref_vol_up";
     static final String PREF_VOL_DOWN = "pref_vol_down";
+    static final String PREF_COVER_SCREEN_ACTION = "pref_cover_screen_action";
+
+    private static final int NARROW_SCREEN_MAX_DP = 400;
 
     private static final int MSG_UPDATE_SUGGESTIONS = 0;
     private static final int MSG_START_TUTORIAL = 1;
@@ -237,6 +240,8 @@ public class LatinIME extends InputMethodService implements
     private int mHeightLandscape;
     private int mNumKeyboardModes = 3;
     private int mKeyboardModeOverridePortrait;
+    private boolean mCoverScreenPicker = false;
+    private int mLastScreenWidthDp = 0;
     private int mKeyboardModeOverrideLandscape;
     private int mCorrectionMode;
     private boolean mEnableVoice = true;
@@ -402,6 +407,7 @@ public class LatinIME extends InputMethodService implements
         LatinIME.sKeyboardSettings.hintMode = Integer.parseInt(prefs.getString(PREF_HINT_MODE, res.getString(R.string.default_hint_mode)));
         LatinIME.sKeyboardSettings.longpressTimeout = getPrefInt(prefs, PREF_LONGPRESS_TIMEOUT, res.getString(R.string.default_long_press_duration));
         LatinIME.sKeyboardSettings.renderMode = getPrefInt(prefs, PREF_RENDER_MODE, res.getString(R.string.default_render_mode));
+        mCoverScreenPicker = "picker".equals(prefs.getString(PREF_COVER_SCREEN_ACTION, "keep"));
         mSwipeUpAction = prefs.getString(PREF_SWIPE_UP, res.getString(R.string.default_swipe_up));
         mSwipeDownAction = prefs.getString(PREF_SWIPE_DOWN, res.getString(R.string.default_swipe_down));
         mSwipeLeftAction = prefs.getString(PREF_SWIPE_LEFT, res.getString(R.string.default_swipe_left));
@@ -695,6 +701,17 @@ public class LatinIME extends InputMethodService implements
                 reloadKeyboards();
             }
         }
+        // Show IME picker when entering/leaving narrow cover screen
+        int widthDp = conf.screenWidthDp;
+        boolean wasNarrow = mLastScreenWidthDp > 0 && mLastScreenWidthDp <= NARROW_SCREEN_MAX_DP;
+        boolean isNarrow = widthDp <= NARROW_SCREEN_MAX_DP;
+        if (mLastScreenWidthDp != widthDp) {
+            mLastScreenWidthDp = widthDp;
+            if (mCoverScreenPicker && (wasNarrow != isNarrow)) {
+                showInputMethodPicker();
+            }
+        }
+
         // If orientation changed while predicting, commit the change
         if (conf.orientation != mOrientation) {
             InputConnection ic = getCurrentInputConnection();
@@ -3455,6 +3472,8 @@ public class LatinIME extends InputMethodService implements
             mSuggestionForceOff = false;
             mSuggestionForceOn = false;
             needReload = true;
+        } else if (PREF_COVER_SCREEN_ACTION.equals(key)) {
+            mCoverScreenPicker = "picker".equals(sharedPreferences.getString(PREF_COVER_SCREEN_ACTION, "keep"));
         } else if (PREF_HEIGHT_PORTRAIT.equals(key)) {
             mHeightPortrait = getHeight(sharedPreferences,
                     PREF_HEIGHT_PORTRAIT, res.getString(R.string.default_height_portrait));
