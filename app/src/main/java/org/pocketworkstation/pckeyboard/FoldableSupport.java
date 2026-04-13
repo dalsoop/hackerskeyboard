@@ -87,12 +87,10 @@ public class FoldableSupport {
     /**
      * Suggest keyboard mode override for current screen.
      * Returns -1 if no override (use user preference).
-     * Returns 0 for 4-row qwerty (force compact on narrow screens).
+     * Narrow screens use the dedicated narrow layout (kbd_qwerty_narrow),
+     * so no mode override is needed.
      */
     public int getKeyboardModeOverride() {
-        if (mCurrentScreen == ScreenClass.NARROW) {
-            return 0;  // Force 4-row on cover screen — 5-row is too cramped
-        }
-        return -1;  // No override
+        return -1;  // Narrow layout handles cover screen; no mode override needed
     }
 }
